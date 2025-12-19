@@ -39,6 +39,37 @@
     <!-- 内容区域 -->
     <div class="content">
         <h2>欢迎进入管理系统</h2>
+
+        <!-- 表格工具栏 -->
+        <div class="table-toolbar">
+            <div class="toolbar-left">
+                <input type="text" id="searchInput" placeholder="搜索姓名 / 手机号">
+                <button onclick="searchUser()">搜索</button>
+            </div>
+            <div class="toolbar-right">
+                <button class="export-btn" onclick="exportExcel()">导出 Excel</button>
+            </div>
+        </div>
+
+        <table class="user-table" id="userTable">
+            <thead>
+            <tr>
+                <th>课程ID</th>
+                <th>课程名</th>
+                <th>教练ID</th>
+                <th>预约时间</th>
+                <th>课程时长</th>
+                <th>课容量</th>
+                <th>当前选课人数</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- JS 动态插入 -->
+            </tbody>
+        </table>
+
+        <script src="/js/coursemanage.js"></script>
     </div>
 </div>
 

@@ -25,4 +25,7 @@ public class Fitness_classes {
     @Getter
     @Setter
     private Integer current_enrollment;
+    @Getter
+    @Setter
+    private String coursestatus;
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.demo.mapper.CourseManageMapper">
+
+    <select id="selectAll" resultType="org.example.demo.entity.Fitness_classes">
+        SELECT class_id, class_name, coach_id, schedule_time, duration_minutes, max_capacity, current_enrollment
+        FROM fitness_classes
+        WHERE coursestatus = 'ACTIVE'
+    </select>
+
+<!--    <select id="getUserById" parameterType="String"-->
+<!--            resultType="org.example.demo.entity.User">-->
+<!--        SELECT member_id, name, phone, membership_type, membership_start_date, membership_end_date, status-->
+<!--        FROM members-->
+<!--        WHERE accountstatus = 'ACTIVE' AND member_id = #{member_id}-->
+<!--    </select>-->
+
+<!--    <select id="searchUsers" resultType="org.example.demo.entity.User" parameterType="String">-->
+<!--        SELECT * FROM members-->
+<!--        WHERE (member_id LIKE CONCAT('%', #{keyword}, '%')-->
+<!--            OR name LIKE CONCAT('%', #{keyword}, '%')-->
+<!--            OR phone LIKE CONCAT('%', #{keyword}, '%')) AND accountstatus = 'ACTIVE'-->
+
+<!--    </select>-->
+<!--    <update id="updateUser" parameterType="org.example.demo.entity.User">-->
+<!--        UPDATE members-->
+<!--        SET-->
+<!--            name = #{name},-->
+<!--            phone = #{phone},-->
+<!--            membership_type = #{membership_type},-->
+<!--            membership_start_date = #{membership_start_date},-->
+<!--            membership_end_date = #{membership_end_date},-->
+<!--            status = #{status}-->
+<!--        WHERE member_id = #{member_id}-->
+<!--    </update>-->
+
+<!--    <delete id="deleteById" parameterType="String">-->
+<!--        UPDATE members-->
+<!--        SET accountstatus = 'DISABLED'-->
+<!--        WHERE member_id = #{member_id};-->
+<!--    </delete>-->
+
+</mapper>
