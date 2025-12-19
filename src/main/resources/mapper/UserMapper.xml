@@ -30,8 +30,8 @@
 <!--        WHERE id = #{id}-->
 <!--    </update>-->
 
-<!--    <delete id="deleteById" parameterType="long">-->
-<!--        DELETE FROM user WHERE id = #{id}-->
-<!--    </delete>-->
+    <delete id="deleteById" parameterType="String">
+        DELETE FROM members WHERE member_id = #{id}
+    </delete>
 
 </mapper>

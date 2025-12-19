@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface Userservice {
     List<User> list();
+
+    void deleteById(String memberId);
 }

@@ -16,7 +16,7 @@ public class BrowserLauncher implements ApplicationRunner {
         try {
             // Windows
             Runtime.getRuntime().exec(
-                    "cmd /c start http://localhost:8082/"
+                    "cmd /c start http://localhost:8082/index"
             );
         } catch (Exception e) {
             e.printStackTrace();
