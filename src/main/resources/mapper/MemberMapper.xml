@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.demo.mapper.MemberMapper">
+
+    <select id="selectMaxMemberId" resultType="string">
+        SELECT MAX(member_id) FROM members
+    </select>
+
+    <insert id="insert">
+        INSERT INTO members
+        (member_id, name, phone, membership_type,
+         membership_start_date, membership_end_date, status)
+        VALUES
+            (#{memberId}, #{name}, #{phone}, #{membershipType},
+             #{membershipStartDate}, #{membershipEndDate}, #{status})
+    </insert>
+
+</mapper>

@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <title>注册</title>
     <link rel="stylesheet" href="/css/login.css">
+    <style>
+        .error-text {
+            color: red;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+    </style>
 </head>
 <body>
 
@@ -11,39 +18,147 @@
     <div class="login-box">
         <h2 class="title">注册账号</h2>
 
-        <form action="/register" method="post">
+        <form action="/register" method="post" id="registerForm">
+
+            <!-- 用户名 -->
             <div class="input-group">
-                <label>
-                    <input type="text"
-                           name="username"
-                           placeholder="请输入账号"
-                           required>
-                </label>
+                <input type="text"
+                       name="username"
+                       id="username"
+                       placeholder="请输入用户名"
+                       required>
+                <div class="error-text" id="usernameError"></div>
             </div>
 
             <!-- 手机号 -->
             <div class="input-group">
-                <label>
-                    <input type="text"
-                           name="phone"
-                           placeholder="请输入手机号"
-                           required>
-                </label>
+                <input type="text"
+                       name="phone"
+                       id="phone"
+                       placeholder="请输入手机号"
+                       required>
+                <div class="error-text" id="phoneError"></div>
             </div>
 
+            <!-- 密码 -->
             <div class="input-group password-group">
-                <label>
-                    <input type="password"
-                           name="password"
-                           placeholder="请输入密码"
-                           required>
-                </label>
+                <input type="password"
+                       name="password"
+                       placeholder="请输入密码"
+                       required>
+            </div>
+            <div style="
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+">
+                <!-- 左侧：联系管理员 -->
+                <a href="javascript:void(0);"
+                   onclick="showAdminPhone()"
+                   style="color:#409EFF; text-decoration:none;">
+                    联系管理员
+                </a>
+
+                <!-- 右侧：返回登录 -->
+                <a href="/"
+                   style="color:#409EFF; text-decoration:none;">
+                    返回登录
+                </a>
             </div>
 
-            <button type="submit" class="login-btn">注册</button>
+            <button type="submit" class="login-btn" id="registerBtn">
+                注册
+            </button>
         </form>
     </div>
 </div>
+<script>
+    console.log("REGISTER JS LOADED");
+
+    const usernameInput = document.getElementById("username");
+    const phoneInput = document.getElementById("phone");
+    const usernameError = document.getElementById("usernameError");
+    const phoneError = document.getElementById("phoneError");
+    const registerBtn = document.getElementById("registerBtn");
+
+    let usernameOk = false;
+    let phoneOk = false;
+
+    function updateButtonState() {
+        registerBtn.disabled = !(usernameOk && phoneOk);
+    }
+
+    /* ===== 输入时清空状态 ===== */
+
+    usernameInput.oninput = function () {
+        usernameError.textContent = "";
+        usernameOk = false;
+        updateButtonState();
+    };
+
+    phoneInput.oninput = function () {
+        phoneError.textContent = "";
+        phoneOk = false;
+        updateButtonState();
+    };
+
+    /* ===== 用户名校验 ===== */
+
+    usernameInput.onblur = function () {
+        const username = usernameInput.value.trim();
+        if (!username) return;
+
+        fetch("/api/register/check-username?username=" + encodeURIComponent(username))
+            .then(res => res.json())
+            .then(exists => {
+                if (exists) {
+                    usernameError.textContent = "用户名已存在";
+                    usernameOk = false;
+                } else {
+                    usernameError.textContent = "";
+                    usernameOk = true;
+                }
+                updateButtonState();
+            });
+    };
+
+    /* ===== 手机号校验（新增位数 + 后端校验） ===== */
+
+    phoneInput.onblur = function () {
+        const phone = phoneInput.value.trim();
+        if (!phone) return;
+
+        // 1️⃣ 本地格式校验（不通过直接拦截）
+        const phonePattern = /^1\d{10}$/;
+        if (!phonePattern.test(phone)) {
+            phoneError.textContent = "请输入正确的电话号码";
+            phoneOk = false;
+            updateButtonState();
+            return; // ❗ 不发后端请求
+        }
+
+        // 2️⃣ 后端唯一性校验
+        fetch("/api/register/check-phone?phone=" + encodeURIComponent(phone))
+            .then(res => res.json())
+            .then(exists => {
+                if (exists) {
+                    phoneError.textContent = "该电话号码已经被注册，请联系管理员或找回";
+                    phoneOk = false;
+                } else {
+                    phoneError.textContent = "";
+                    phoneOk = true;
+                }
+                updateButtonState();
+            });
+    };
+</script>
+
+<script>
+    function showAdminPhone() {
+        alert("管理员电话：666666666");
+    }
+</script>
 
 </body>
 </html>

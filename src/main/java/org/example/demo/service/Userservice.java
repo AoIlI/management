@@ -1,9 +1,9 @@
 package org.example.demo.service;
 
-import org.example.demo.entity.User;
+import org.example.demo.entity.Member;
 
 import java.util.List;
 
 public interface Userservice {
-    List<User> list();
+    List<Member> list();
 }

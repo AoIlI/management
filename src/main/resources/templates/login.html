@@ -2,40 +2,136 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>登录</title>
+    <title>系统登录</title>
     <link rel="stylesheet" href="/css/login.css">
+    <style>
+        .error-text { color: red; font-size: 14px; margin-bottom: 10px; text-align: center; }
+        .link-row { display: flex; justify-content: space-between; font-size: 14px; margin-top: 6px; }
+        .link-row a { color: #409eff; text-decoration: none; }
+        .link-row a:hover { text-decoration: underline; }
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
-
 <div class="login-container">
     <div class="login-box">
-        <h2 class="title">系统登录</h2>
 
-        <form action="/login" method="post">
-            <div class="input-group">
-                <label>
-                    <input type="text"
-                           name="username"
-                           placeholder="请输入账号"
-                           required>
-                </label>
+        <!-- 登录界面 -->
+        <div id="loginView">
+            <h2 class="title">系统登录</h2>
+            <div class="error-text" id="loginError" style="display:none;">用户名或密码错误，请重新输入</div>
+            <form action="/login" method="post">
+                <div class="input-group"><input type="text" name="username" placeholder="请输入账号" required></div>
+                <div class="input-group password-group">
+                    <input type="password" name="password" placeholder="请输入密码" required>
+                    <div class="link-row">
+                        <a href="/register">没有账号？去注册</a>
+                        <a href="javascript:void(0);" onclick="showRecover()">忘记密码？去找回</a>
+                    </div>
+                </div>
+                <button type="submit" class="login-btn">登录</button>
+            </form>
+        </div>
+
+        <!-- 找回密码界面 -->
+        <div id="recoverView" class="hidden">
+            <h2 class="title">找回密码</h2>
+            <div class="error-text" id="recoverError" style="display:none;"></div>
+            <div class="input-group"><input type="text" id="recoverUsername" placeholder="请输入用户名" required></div>
+            <div class="input-group"><input type="text" id="recoverPhone" placeholder="请输入手机号" required></div>
+            <button class="login-btn" onclick="verifyUser()">确认</button>
+            <div class="link-row" style="margin-top:10px;">
+                <a href="javascript:void(0);" onclick="showLogin()">返回登录</a>
+                <a href="javascript:void(0);" onclick="showAdmin()">联系管理员</a>
             </div>
+        </div>
 
-            <div class="input-group password-group">
-                <label>
-                    <input type="password"
-                           name="password"
-                           placeholder="请输入密码"
-                           required>
-                </label>
+        <!-- 重设密码界面 -->
+        <div id="resetView" class="hidden">
+            <h2 class="title">重设密码</h2>
+            <div class="error-text" id="resetError" style="display:none;">两次输入的密码不一致</div>
+            <div class="input-group"><input type="password" id="newPassword" placeholder="请输入新密码" required></div>
+            <div class="input-group"><input type="password" id="confirmPassword" placeholder="请再次输入新密码" required></div>
+            <button class="login-btn" onclick="resetPassword()">确认修改</button>
+        </div>
 
-                <a href="/register" class="register-link">注册账号</a>
-            </div>
-
-            <button type="submit" class="login-btn">登录</button>
-        </form>
     </div>
 </div>
 
+<script>
+    function showRecover() { hideAll(); document.getElementById("recoverView").classList.remove("hidden"); }
+    function showLogin() { hideAll(); document.getElementById("loginView").classList.remove("hidden"); }
+    function showReset() { hideAll(); document.getElementById("resetView").classList.remove("hidden"); }
+    function hideAll() {
+        document.getElementById("loginView").classList.add("hidden");
+        document.getElementById("recoverView").classList.add("hidden");
+        document.getElementById("resetView").classList.add("hidden");
+    }
+    function showAdmin() { alert("管理员电话：666666666"); }
+
+    // 校验用户名 + 手机号
+    function verifyUser() {
+        const username = document.getElementById("recoverUsername").value.trim();
+        const phone = document.getElementById("recoverPhone").value.trim();
+
+        if (!username || !phone) {
+            document.getElementById("recoverError").innerText = "用户名和手机号不能为空";
+            document.getElementById("recoverError").style.display = "block";
+            return;
+        }
+
+        fetch('/api/password/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `username=${encodeURIComponent(username)}&phone=${encodeURIComponent(phone)}`
+        })
+            .then(res => res.text())  // 直接拿文本
+            .then(result => {
+                if (result === "true") { // 注意这里是字符串 "true"
+                    showReset();
+                    document.getElementById("recoverError").style.display = "none";
+                } else {
+                    document.getElementById("recoverError").innerText = "用户名与手机号不匹配";
+                    document.getElementById("recoverError").style.display = "block";
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById("recoverError").innerText = "校验失败，请稍后重试";
+                document.getElementById("recoverError").style.display = "block";
+            });
+    }
+
+    function resetPassword() {
+        const username = document.getElementById("recoverUsername").value.trim();
+        const p1 = document.getElementById("newPassword").value.trim();
+        const p2 = document.getElementById("confirmPassword").value.trim();
+
+        if (p1 !== p2) {
+            document.getElementById("resetError").style.display = "block";
+            return;
+        }
+
+        fetch('/api/password/reset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(p1)}`
+        })
+            .then(res => res.text())
+            .then(result => {
+                if (result === "true") {
+                    alert("密码修改成功，请重新登录");
+                    showLogin();
+                } else {
+                    alert("密码修改失败，请联系管理员");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("请求失败，请稍后重试");
+            });
+    }
+
+</script>
 </body>
 </html>

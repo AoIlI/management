@@ -3,10 +3,10 @@ package org.example.demo.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-public class User {
+public class Member {
     @Setter
     @Getter
-    private String member_id;
+    private String memberId;
     @Setter
     @Getter
     private String name;
@@ -15,13 +15,13 @@ public class User {
     private String phone;
     @Setter
     @Getter
-    private String membership_type;
+    private String membershipType;
     @Setter
     @Getter
-    private String membership_start_date;
+    private String membershipStartDate;
     @Setter
     @Getter
-    private String membership_end_date;
+    private String membershipEndDate;
     @Setter
     @Getter
     private String status;

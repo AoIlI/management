@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.demo.mapper.AccountMapper">
+
+    <select id="selectByUsername"
+            parameterType="string"
+            resultType="org.example.demo.entity.Account">
+        SELECT *
+        FROM accounts
+        WHERE username = #{username}
+    </select>
+    <select id="selectByPhone" resultType="org.example.demo.entity.Account">
+        SELECT *
+        FROM accounts
+        WHERE phone = #{phone}
+            LIMIT 1
+    </select>
+    <select id="selectByUsernameAndPassword"
+            resultType="org.example.demo.entity.Account">
+        SELECT *
+        FROM accounts
+        WHERE username = #{username}
+          AND password = #{password}
+    </select>
+    <select id="countByUsernameAndPhone" resultType="int" parameterType="map">
+        SELECT COUNT(*)
+        FROM accounts
+        WHERE username = #{username}
+          AND phone = #{phone}
+    </select>
+
+    <insert id="insert"
+            parameterType="org.example.demo.entity.Account">
+        INSERT INTO accounts
+            (account_id, username, password, phone, role)
+        VALUES
+            (#{accountId}, #{username}, #{password}, #{phone}, #{role})
+    </insert>
+    <update id="updatePassword">
+        UPDATE accounts
+        SET password = #{password}
+        WHERE username = #{username}
+    </update>
+</mapper>
+
+
