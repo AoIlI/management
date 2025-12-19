@@ -8,30 +8,39 @@
     <select id="selectAll" resultType="org.example.demo.entity.User">
         SELECT member_id, name, phone, membership_type, membership_start_date, membership_end_date, status
         FROM members
+        WHERE accountstatus = 'ACTIVE'
     </select>
 
-<!--    <select id="selectById" parameterType="long"-->
-<!--            resultType="com.example.demo.entity.User">-->
-<!--        SELECT id, username, email, age-->
-<!--        FROM user-->
-<!--        WHERE id = #{id}-->
-<!--    </select>-->
+    <select id="getUserById" parameterType="String"
+            resultType="org.example.demo.entity.User">
+        SELECT member_id, name, phone, membership_type, membership_start_date, membership_end_date, status
+        FROM members
+        WHERE accountstatus = 'ACTIVE' AND member_id = #{member_id}
+    </select>
 
-<!--    <insert id="insert" parameterType="com.example.demo.entity.User">-->
-<!--        INSERT INTO user(username, email, age)-->
-<!--        VALUES (#{username}, #{email}, #{age})-->
-<!--    </insert>-->
+    <select id="searchUsers" resultType="org.example.demo.entity.User" parameterType="String">
+        SELECT * FROM members
+        WHERE (member_id LIKE CONCAT('%', #{keyword}, '%')
+        OR name LIKE CONCAT('%', #{keyword}, '%')
+        OR phone LIKE CONCAT('%', #{keyword}, '%')) AND accountstatus = 'ACTIVE'
 
-<!--    <update id="update" parameterType="com.example.demo.entity.User">-->
-<!--        UPDATE user-->
-<!--        SET username = #{username},-->
-<!--            email = #{email},-->
-<!--            age = #{age}-->
-<!--        WHERE id = #{id}-->
-<!--    </update>-->
+    </select>
+    <update id="updateUser" parameterType="org.example.demo.entity.User">
+        UPDATE members
+        SET
+            name = #{name},
+            phone = #{phone},
+            membership_type = #{membership_type},
+            membership_start_date = #{membership_start_date},
+            membership_end_date = #{membership_end_date},
+            status = #{status}
+        WHERE member_id = #{member_id}
+    </update>
 
-<!--    <delete id="deleteById" parameterType="long">-->
-<!--        DELETE FROM user WHERE id = #{id}-->
-<!--    </delete>-->
+    <delete id="deleteById" parameterType="String">
+        UPDATE members
+        SET accountstatus = 'DISABLED'
+        WHERE member_id = #{member_id};
+    </delete>
 
 </mapper>

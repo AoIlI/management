@@ -38,6 +38,8 @@ body {
 .content {
     flex: 1;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .popup {
@@ -92,13 +94,21 @@ body {
 
 .user-table th,
 .user-table td {
-    border: 1px solid #ddd;
+    border: 0 solid #ddd;
     padding: 10px;
     text-align: center;
 }
 
 .user-table th {
     background-color: #f5f7fa;
+}
+
+/* 表头固定效果 */
+.user-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f5f5f5;
+    z-index: 2;
 }
 
 /* 操作按钮 */
@@ -234,4 +244,13 @@ body {
     visibility: visible;
     opacity: 1;
     bottom: 50px;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-y: auto;      /* 纵向滚动 */
+    max-height: calc(100vh - 50px - 20px - 50px);
+    /* 100vh 减去顶部栏高度 50px + content 内边距 20px + 表格下方额外间距 50px */
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
