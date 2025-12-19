@@ -27,4 +27,19 @@ public class UserserviceImpl implements Userservice {
     public void deleteById(String memberId) {
         userMapper.deleteById(memberId);
     }
+
+    @Override
+    public void updateUser(User user) {
+        userMapper.updateUser(user);
+    }
+
+    @Override
+    public User getUserById(String memberId) {
+        return userMapper.getUserById(memberId);
+    }
+
+    @Override
+    public List<User> searchUsers(String keyword) {
+        return userMapper.searchUsers(keyword);
+    }
 }

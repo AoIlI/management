@@ -8,6 +8,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.demo.entity.User;
 import org.example.demo.service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,9 +31,11 @@ public class UserController {
     }
 
     @GetMapping("/export")
-    public void export(HttpServletResponse response) throws Exception {
+    public void export(HttpServletResponse response,@RequestParam(required = false) String keyword) throws Exception {
 
-        List<User> users = userService.list();
+        List<User> users = (keyword == null || keyword.isEmpty())
+                ? userService.list()
+                : userService.searchUsers(keyword);
 
         // 1. 创建 Excel
         Workbook workbook = new XSSFWorkbook();
@@ -78,6 +82,27 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") String memberId) {
         userService.deleteById(memberId);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> update(@RequestBody User user) {
+        try {
+            userService.updateUser(user);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("修改失败");
+        }
+    }
+
+    //  单个用户接口
+    @GetMapping("/{memberId}")
+    public User getUser(@PathVariable("memberId") String memberId) {
+        return userService.getUserById(memberId);
+    }
+
+    @GetMapping("/search")
+    public List<User> search(@RequestParam("keyword") String keyword) {
+        return userService.searchUsers(keyword);
     }
 }
 

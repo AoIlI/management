@@ -8,4 +8,10 @@ public interface Userservice {
     List<User> list();
 
     void deleteById(String memberId);
+
+    void updateUser(User user);
+
+    User getUserById(String memberId);
+
+    List<User> searchUsers(String keyword);
 }
