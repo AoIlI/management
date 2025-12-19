@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>用户管理</title>
-    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/user.css">
 </head>
 <body>
 
@@ -39,18 +39,30 @@
 
     <!-- 内容区域 -->
     <div class="content">
-        <h2>用户列表</h2>
+        <h2>用户管理</h2>
 
-        <table border="1" id="userTable">
+        <!-- 表格工具栏 -->
+        <div class="table-toolbar">
+            <div class="toolbar-left">
+                <input type="text" id="searchInput" placeholder="搜索姓名 / 手机号">
+                <button onclick="searchUser()">搜索</button>
+            </div>
+            <div class="toolbar-right">
+                <button class="export-btn" onclick="exportExcel()">导出 Excel</button>
+            </div>
+        </div>
+
+        <table class="user-table" id="userTable">
             <thead>
             <tr>
                 <th>ID</th>
                 <th>姓名</th>
                 <th>手机号</th>
                 <th>会员卡类型</th>
-                <th>会员卡生效时间</th>
-                <th>会员卡到期时间</th>
-                <th>会员卡状态</th>
+                <th>生效时间</th>
+                <th>到期时间</th>
+                <th>状态</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
@@ -63,5 +75,47 @@
 </div>
 
 <script src="/js/main.js"></script>
+
+<!-- 修改会员弹窗 -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <h3>修改会员信息</h3>
+        <form id="editForm" onsubmit="submitEditForm(event)">
+            <label>会员ID（不可修改）</label>
+            <label for="editMemberId"></label><input type="text" id="editMemberId" name="member_id" readonly>
+
+            <label>姓名</label>
+            <label for="editName"></label><input type="text" id="editName" name="name" readonly>
+
+            <label>手机号</label>
+            <label for="editPhone"></label><input type="text" id="editPhone" name="phone" readonly>
+
+            <label>会员卡类型</label>
+            <label for="editMembershipType"></label><select id="editMembershipType" name="membership_type">
+                <option value="月卡">月卡</option>
+                <option value="季卡">季卡</option>
+                <option value="年卡">年卡</option>
+                <option value="次卡">次卡</option>
+        </select>
+
+            <label>会员卡开始时间</label>
+            <label for="editStartDate"></label><input type="date" id="editStartDate" name="membership_start_date">
+
+            <label>会员卡结束时间</label>
+            <label for="editEndDate"></label><input type="date" id="editEndDate" name="membership_end_date">
+
+            <label>状态</label>
+            <label for="editStatus"></label><select id="editStatus" name="status">
+                <option value="正常">正常</option>
+                <option value="过期">过期</option>
+                <option value="冻结">冻结</option>
+            </select>
+
+            <button type="submit">保存修改</button>
+        </form>
+    </div>
+</div>
+<div id="toast" class="toast"></div>
 </body>
 </html>

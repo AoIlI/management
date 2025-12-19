@@ -1,6 +1,6 @@
 package org.example.demo.controller;
 
-import org.example.demo.entity.Member;
+import org.example.demo.entity.User;
 import org.example.demo.service.Userservice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public List<Member> list() {
+    public List<User> list() {
         return userService.list();
     }
 }

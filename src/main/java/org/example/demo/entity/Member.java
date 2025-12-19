@@ -25,5 +25,7 @@ public class Member {
     @Setter
     @Getter
     private String status;
-
+    @Setter
+    @Getter
+    private String account_status;
 }
