@@ -8,4 +8,12 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
     List<User> selectAll();
+
+    void updateUser(User user);
+
+    void deleteById(String memberId);
+
+    User getUserById(String memberId);
+
+    List<User> searchUsers(String keyword);
 }
