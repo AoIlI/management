@@ -1,0 +1,90 @@
+/* 页面整体 */
+body {
+    margin: 0;
+    height: 100vh;
+    background-color: #e6f2ff; /* 浅蓝色背景 */
+    font-family: Arial, sans-serif;
+}
+
+/* 外层容器：居中 */
+.login-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0; /* 上下留 50px */
+    box-sizing: border-box;
+}
+
+/* 登录框 */
+.login-box {
+    width: 33%;
+    min-width: 320px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 70px 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* 标题 */
+.title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* 输入组 */
+.input-group {
+    margin-bottom: 20px;
+}
+
+/* 输入框 */
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+/* 聚焦效果 */
+.input-group input:focus {
+    border-color: #409eff;
+}
+
+/* 密码输入组，用于放注册链接 */
+.password-group {
+    position: relative;
+}
+
+/* 注册链接 */
+.register-link {
+    position: absolute;
+    right: 6px;
+    bottom: -18px;
+    font-size: 13px;
+    color: #409eff;
+    text-decoration: none;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+/* 登录按钮 */
+.login-btn {
+    width: 100%;
+    margin-top: 35px;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    background-color: #43a047;
+}
