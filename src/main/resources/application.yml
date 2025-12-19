@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/gym?useSSL=false&serverTimezone=UTC
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: org.example.demo.entity
+

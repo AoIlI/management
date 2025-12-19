@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>管理系统</title>
+    <link rel="stylesheet" href="/css/layout.css">
+</head>
+<body>
+
+<!-- 顶栏 -->
+<div class="topbar">
+    <div class="topbar-left">
+        欢迎，<span id="username">李华</span>
+    </div>
+    <div class="topbar-right">
+        <button onclick="togglePopup()">更多 ▾</button>
+        <div id="popup" class="popup">
+            <p>角色：管理员</p>
+            <p>邮箱：test@test.com</p>
+            <button>退出登录</button>
+        </div>
+    </div>
+</div>
+
+<!-- 主体 -->
+<div class="container">
+    <!-- 侧边栏 -->
+    <div class="sidebar">
+        <a href="/user">用户管理</a>
+        <a href="/product">商品管理</a>
+        <a href="/order">订单管理</a>
+        <a href="/index">🐖</a>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+        <h2>用户列表</h2>
+
+        <table border="1" id="userTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>姓名</th>
+                <th>手机号</th>
+                <th>会员卡类型</th>
+                <th>会员卡生效时间</th>
+                <th>会员卡到期时间</th>
+                <th>会员卡状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- JS 动态插入 -->
+            </tbody>
+        </table>
+
+        <script src="/js/user.js"></script>
+    </div>
+</div>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
