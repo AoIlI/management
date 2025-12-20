@@ -6,44 +6,58 @@
 <mapper namespace="org.example.demo.mapper.AccountMapper">
 
     <select id="selectByUsername"
-            parameterType="string"
             resultType="org.example.demo.entity.Account">
         SELECT *
         FROM accounts
         WHERE username = #{username}
     </select>
-    <select id="selectByPhone" resultType="org.example.demo.entity.Account">
+
+    <select id="selectByPhone"
+            resultType="org.example.demo.entity.Account">
         SELECT *
         FROM accounts
         WHERE phone = #{phone}
             LIMIT 1
     </select>
+
     <select id="selectByUsernameAndPassword"
             resultType="org.example.demo.entity.Account">
-        SELECT *
+        SELECT
+            account_id AS accountId,
+            username,
+            password,
+            phone,
+            role
         FROM accounts
         WHERE username = #{username}
           AND password = #{password}
     </select>
-    <select id="selectByUsernameAndPhone" resultType="int" parameterType="map">
-        SELECT COUNT(*)
-        FROM accounts
-        WHERE username = #{username}
-          AND phone = #{phone}
-    </select>
 
-    <insert id="insert"
-            parameterType="org.example.demo.entity.Account">
+    <insert id="insert">
         INSERT INTO accounts
             (account_id, username, password, phone, role)
         VALUES
             (#{accountId}, #{username}, #{password}, #{phone}, #{role})
     </insert>
+
     <update id="updatePassword">
         UPDATE accounts
         SET password = #{password}
         WHERE username = #{username}
     </update>
+
+    <update id="updateUsernameAndPhone">
+        UPDATE accounts
+        SET username = #{username},
+            phone = #{phone}
+        WHERE account_id = #{accountId}
+    </update>
+    <update id="updateBaseInfoByAccountId">
+        UPDATE accounts
+        SET username = #{username},
+            phone = #{phone}
+        WHERE account_id = #{accountId}
+    </update>
+
+
 </mapper>
-
-

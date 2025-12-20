@@ -3,45 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <title>个人信息</title>
+    <link rel="stylesheet" href="/css/info.css">
     <link rel="stylesheet" href="/css/user.css">
+
 </head>
+
 <body>
 
 <!-- 顶栏 -->
 <div class="topbar">
-    <div class="topbar-left">
-        欢迎，<span id="username">李华</span>
-    </div>
-    <div class="topbar-right">
-        <button onclick="togglePopup()">更多 ▾</button>
-        <div id="popup" class="popup">
-            <p>角色：管理员</p>
-            <p>邮箱：test@test.com</p>
-            <button>退出登录</button>
-        </div>
-    </div>
+    <div class="topbar-left">健身房管理系统</div>
 </div>
 
-<!-- 主体 -->
 <div class="container">
-    <!-- 侧边栏 -->
+
+    <!-- 左侧导航 -->
     <div class="sidebar">
         <a href="/user">用户管理</a>
         <a href="/purchase_course">购买课程</a>
         <a href="/order">课程预约</a>
-        <a href="/info">个人信息</a>
-        <a href="/equipment">设备状态</a>
-        <a href="/equipmentManage">设备管理</a>
-        <a href="/staffManage">员工管理</a>
-        <a href="/courseManage">课程管理</a>
+        <a href="/info" class="active">个人信息</a>
     </div>
 
-    <!-- 内容区域 -->
     <div class="content">
-        <h2>欢迎进入管理系统</h2>
+        <div class="content-inner">
+
+            <h2 style="margin-bottom:20px;">个人信息</h2>
+
+            <div class="profile-body">
+
+                <!-- 左侧摘要 -->
+                <div class="profile-left">
+                    <div class="avatar" id="avatar">U</div>
+                    <p><strong id="nameText"></strong></p>
+                    <p>会员编号：<span id="memberId"></span></p>
+                    <p>会员类型：<span id="membershipType"></span></p>
+                    <p>状态：<span id="status"></span></p>
+                </div>
+
+                <!-- 右侧表单 -->
+                <div class="profile-right">
+                    <div class="form-container">
+                        <div class="form-row">
+                            <label for="nameInput">用户名</label>
+                            <input id="nameInput" disabled>
+                            <div id="nameError" class="error-text"></div>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="phoneInput">手机号</label>
+                            <input id="phoneInput" disabled>
+                            <div id="phoneError" class="error-text"></div>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="dateRange">会员有效期</label>
+                            <input id="dateRange" disabled>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="accountStatus">账户状态</label>
+                            <input id="accountStatus" disabled>
+                        </div>
+
+                        <button class="btn btn-edit" id="editBtn">修改资料</button>
+                        <button class="btn btn-save" id="saveBtn">保存修改</button>
+                        <button class="btn btn-cancel" id="cancelBtn" style="display:none;">退出修改</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>
 
-<script src="/js/main.js"></script>
+<script src="/js/info.js"></script>
+<script>
+    console.log("info.js loaded");
+</script>
 </body>
 </html>

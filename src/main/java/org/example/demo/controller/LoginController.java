@@ -20,17 +20,22 @@ public class LoginController {
     public String login(@RequestParam String username,
                         @RequestParam String password,
                         HttpSession session) {
+
+        System.out.println("【LOGIN】开始登录，username=" + username);
+
         Account account = loginService.login(username, password);
 
         if (account == null) {
-            // 登录失败，返回 login.html 模板，并显示错误
-            return "login"; // 页面导航已经映射 "/" → login.html
+            System.out.println("【LOGIN】登录失败");
+            return "login";
         }
 
         // 登录成功，写入 session
         session.setAttribute("loginUser", account);
-
-        // 跳转首页模板
-        return "index"; // 页面导航已经映射 "/index" → index.html
+        System.out.println("【LOGIN】登录成功，sessionId=" + session.getId());
+        System.out.println("【LOGIN】loginUser=" + account);
+        // ★ 必须重定向，建立真正的登录态
+        return "redirect:/index";
     }
+
 }
