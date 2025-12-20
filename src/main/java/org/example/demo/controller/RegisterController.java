@@ -20,12 +20,17 @@ public class RegisterController {
     public String register(@RequestParam String username,
                            @RequestParam String password,
                            @RequestParam String phone) {
-
-        registerService.registerMember(username, password, phone);
-
-        return "redirect:/";
+        try {
+            registerService.registerMember(username, password, phone);
+            // 注册成功，跳回登录页
+            return "redirect:/";
+        } catch (RuntimeException e) {
+            // 注册失败，回到注册页，并加错误参数
+            return "redirect:/register.html?error=" + e.getMessage();
+        }
     }
-        @ResponseBody
+
+    @ResponseBody
         @GetMapping("/api/register/check-username")
         public boolean checkUsername(@RequestParam String username) {
             return registerService.usernameExists(username);

@@ -60,17 +60,17 @@ body {
 
 /* 注册链接 */
 .register-link {
-    position: absolute;
-    right: 6px;
-    bottom: -18px;
     font-size: 13px;
     color: #409eff;
     text-decoration: none;
+    position: static; /* 去掉绝对定位 */
+    line-height: 1.5;
 }
-
 .register-link:hover {
     text-decoration: underline;
 }
+
+
 
 /* 登录按钮 */
 .login-btn {

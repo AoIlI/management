@@ -25,7 +25,7 @@
         WHERE username = #{username}
           AND password = #{password}
     </select>
-    <select id="countByUsernameAndPhone" resultType="int" parameterType="map">
+    <select id="selectByUsernameAndPhone" resultType="int" parameterType="map">
         SELECT COUNT(*)
         FROM accounts
         WHERE username = #{username}

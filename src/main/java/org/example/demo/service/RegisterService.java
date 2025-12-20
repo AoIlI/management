@@ -18,7 +18,6 @@ public class RegisterService {
         this.memberMapper = memberMapper;
         this.accountMapper = accountMapper;
     }
-
     /**
      * 注册会员（你已经验证成功的主流程，不动）
      */
@@ -60,9 +59,7 @@ public class RegisterService {
 
         accountMapper.insert(account);
     }
-
     /* ================= 新增：供前端实时校验使用 ================= */
-
     /**
      * 用户名是否存在
      */

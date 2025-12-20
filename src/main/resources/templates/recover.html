@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>找回密码</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+
+<div class="login-container">
+    <div class="login-box">
+        <h2 class="title">找回密码</h2>
+
+        <!-- 第一步：验证用户名 + 手机号 -->
+        <div id="step1">
+            <form id="verifyForm">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="请输入用户名" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="phone" placeholder="请输入手机号" required>
+                    <div class="error-text" id="phoneError"></div>
+                </div>
+                <button type="submit" class="login-btn">下一步</button>
+            </form>
+        </div>
+
+        <!-- 第二步：重置密码 -->
+        <div id="step2" style="display:none;">
+            <form id="resetForm">
+                <input type="hidden" id="usernameHidden" name="username">
+                <div class="input-group">
+                    <input type="password" id="newPassword" placeholder="请输入新密码" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="confirmPassword" placeholder="请确认新密码" required>
+                    <div class="error-text" id="passwordError"></div>
+                </div>
+                <button type="submit" class="login-btn">提交</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const usernameInput = document.getElementById('username');
+        const phoneInput = document.getElementById('phone');
+        const phoneError = document.getElementById('phoneError');
+
+        const usernameHidden = document.getElementById('usernameHidden');
+        const newPassword = document.getElementById('newPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const passwordError = document.getElementById('passwordError');
+
+        // 第一步：验证用户名+手机号
+        document.getElementById('verifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = usernameInput.value.trim();
+            const phone = phoneInput.value.trim();
+
+            fetch('/recover', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `username=${encodeURIComponent(username)}&phone=${encodeURIComponent(phone)}&action=verify`
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        // 验证成功 → 显示重置密码表单
+                        step1.style.display = 'none';
+                        step2.style.display = 'block';
+                        usernameHidden.value = username;
+                    } else {
+                        phoneError.textContent = '用户名与手机号不匹配，请重新输入';
+                    }
+                })
+                .catch(err => console.error(err));
+        });
+
+        // 第二步：提交新密码
+        document.getElementById('resetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if(newPassword.value !== confirmPassword.value) {
+                passwordError.textContent = '两次密码输入不一致';
+                return;
+            }
+
+            fetch('/recover', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `username=${encodeURIComponent(usernameHidden.value)}&newPassword=${encodeURIComponent(newPassword.value)}&action=reset`
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        alert('密码重置成功，请登录');
+                        window.location.href = '/';
+                    } else {
+                        passwordError.textContent = data.message || '重置密码失败';
+                    }
+                })
+                .catch(err => console.error(err));
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -60,4 +60,7 @@ public class PageController {
     public String staffManage() {
         return "staffManage"; // 对应 templates/staffManage.html
     }
+
+    @GetMapping("/recover")
+    public String recover() {return "recover"; }
 }
