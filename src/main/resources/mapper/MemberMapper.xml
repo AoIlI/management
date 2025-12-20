@@ -18,4 +18,45 @@
              #{membershipStartDate}, #{membershipEndDate}, #{status})
     </insert>
 
+    <select id="selectByMemberId"
+            resultType="org.example.demo.entity.Member">
+        SELECT
+            member_id AS memberId,
+            name,
+            phone,
+            membership_type AS membershipType,
+            membership_start_date AS membershipStartDate,
+            membership_end_date AS membershipEndDate,
+            status,
+            accountstatus
+        FROM members
+        WHERE member_id = #{memberId}
+    </select>
+
+    <update id="updateBaseInfo">
+        UPDATE members
+        SET name = #{name},
+            phone = #{phone}
+        WHERE member_id = #{memberId}
+    </update>
+
+    <select id="selectByField"
+            resultType="org.example.demo.entity.Member">
+        SELECT *
+        FROM members
+        WHERE
+        <choose>
+            <when test="field == 'name'">
+                name = #{value}
+            </when>
+            <when test="field == 'phone'">
+                phone = #{value}
+            </when>
+            <otherwise>
+                1 = 0
+            </otherwise>
+        </choose>
+        LIMIT 1
+    </select>
+
 </mapper>
