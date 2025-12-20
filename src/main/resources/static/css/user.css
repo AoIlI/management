@@ -4,7 +4,7 @@ body {
 }
 
 .topbar {
-    height: 50px;
+    height: 70px;
     background-color: #2f4050;
     color: white;
     display: flex;
@@ -15,13 +15,13 @@ body {
 
 .container {
     display: flex;
-    height: calc(100vh - 50px);
+    height: calc(100vh - 70px);
 }
 
 .sidebar {
     width: 200px;
     background-color: #1c2b36;
-    padding-top: 20px;
+    padding-top: 10px;
 }
 
 .sidebar a {
@@ -37,7 +37,7 @@ body {
 
 .content {
     flex: 1;
-    padding: 20px;
+    padding: 10px 20px 20px 20px;
     display: flex;
     flex-direction: column;
 }
@@ -289,7 +289,7 @@ body {
 .table-wrapper {
     width: 100%;
     overflow-y: auto;      /* 纵向滚动 */
-    max-height: calc(100vh - 50px - 20px - 50px);
+    max-height: calc(100vh - 70px - 20px - 50px);
     /* 100vh 减去顶部栏高度 50px + content 内边距 20px + 表格下方额外间距 50px */
     border: 1px solid #ccc;
     border-radius: 5px;

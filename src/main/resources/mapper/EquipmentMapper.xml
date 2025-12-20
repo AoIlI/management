@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.demo.mapper.EquipmentMapper">
+
+    <select id="selectAll" resultType="org.example.demo.entity.Equipment">
+        SELECT name, equipment_id, category, purchase_date, status, health_status, last_maintenance_date, maintenance_count, service_life, usage_count, price, area
+        FROM equipment
+    </select>
+
+
+
+</mapper>
