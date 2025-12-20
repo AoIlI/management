@@ -44,9 +44,10 @@
         <div class="table-toolbar">
             <div class="toolbar-left">
                 <input type="text" id="searchInput" placeholder="搜索姓名 / 手机号">
-                <button onclick="searchUser()">搜索</button>
+                <button onclick="searchCourse()">搜索</button>
             </div>
             <div class="toolbar-right">
+                <button class="add-btn" onclick="openAddModal()">添加课程</button>
                 <button class="export-btn" onclick="exportExcel()">导出 Excel</button>
             </div>
         </div>
@@ -75,5 +76,86 @@
 </div>
 
 <script src="/js/main.js"></script>
+
+<!-- 修改课程弹窗 -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <h3>修改课程信息</h3>
+        <form id="editForm" onsubmit="submitEditForm(event)">
+            <label>课程ID</label>
+            <label for="editClassId"></label><input type="text" id="editClassId" name="class_id">
+
+            <label>课程名</label>
+            <label for="editClassName"></label><input type="text" id="editClassName" name="class_name">
+
+            <label>教练ID</label>
+            <label for="editCoachId"></label><input type="text" id="editCoachId" name="coach_id">
+
+            <label>预约时间</label>
+            <label for="editScheduleTime"></label><input type="datetime-local" id="editScheduleTime" name="schedule_time">
+
+            <label>课程时长</label>
+            <label for="editDurationMinutes"></label><input type="text" id="editDurationMinutes" name="duration_minutes">
+
+            <label>课容量</label>
+            <label for="editMaxCapacity"></label><input type="text" id="editMaxCapacity" name="max_capacity">
+
+            <label>当前选课人数</label>
+            <label for="editCurrentEnrollment"></label><input type="text" id="editCurrentEnrollment" name="current_enrollment" readonly>
+
+            <button type="submit">保存修改</button>
+        </form>
+    </div>
+</div>
+
+<!-- 添加课程弹窗 -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddModal()">&times;</span>
+        <h3>添加课程</h3>
+
+        <!-- 错误提示区域 -->
+
+
+        <form id="addForm" onsubmit="submitAddForm(event)">
+            <label>课程ID</label>
+            <label for="addClassId"></label>
+            <div id="addErrorMsg" class="form-error"></div>
+            <input type="text" id="addClassId" name="class_id" required>
+
+            <label>课程名</label>
+            <label for="addClassName"></label>
+            <input type="text" id="addClassName" name="class_name" required>
+
+            <label>教练ID</label>
+            <label for="addCoachId"></label>
+            <input type="text" id="addCoachId" name="coach_id" required>
+
+            <label>预约时间</label>
+            <label for="addScheduleTime"></label>
+            <input type="datetime-local" id="addScheduleTime" name="schedule_time" required>
+
+            <label>课程时长（分钟）</label>
+            <label for="addDurationMinutes"></label>
+            <input type="number" id="addDurationMinutes" name="duration_minutes" required>
+
+            <label>课容量</label>
+            <label for="addMaxCapacity"></label>
+            <input type="number" id="addMaxCapacity" name="max_capacity" required>
+
+            <label>当前选课人数</label>
+            <label for="addCurrentEnrollment"></label>
+            <input type="number"
+                   id="addCurrentEnrollment"
+                   name="current_enrollment"
+                   value="0"
+                   readonly>
+
+            <button type="submit">确认添加</button>
+        </form>
+    </div>
+</div>
+
 </body>
 </html>

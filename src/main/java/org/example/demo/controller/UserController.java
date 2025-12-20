@@ -40,6 +40,7 @@ public class UserController {
 
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet("Users");
+
         Row header = sheet.createRow(0);
         String[] titles = {"ID", "姓名", "手机号", "会员卡类型", "开始时间", "结束时间", "状态"};
         for (int i = 0; i < titles.length; i++) {
@@ -57,6 +58,20 @@ public class UserController {
             row.createCell(5).setCellValue(u.getMembership_end_date());
             row.createCell(6).setCellValue(u.getStatus());
         }
+
+        //  自动列宽（重点）
+        for (int i = 0; i < titles.length; i++) {
+            sheet.autoSizeColumn(i);
+
+            // 防止中文 / 表头过窄，设置一个最小宽度
+            int currentWidth = sheet.getColumnWidth(i);
+            int minWidth = 20 * 256; // 20 个字符宽
+
+            if (currentWidth < minWidth) {
+                sheet.setColumnWidth(i, minWidth);
+            }
+        }
+
 
         wb.write(response.getOutputStream());
         wb.close();

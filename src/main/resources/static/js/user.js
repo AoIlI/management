@@ -128,8 +128,8 @@ function submitEditForm(event) {
         name: document.getElementById('editName').value,
         phone: document.getElementById('editPhone').value,
         membership_type: document.getElementById('editMembershipType').value,
-        membership_start_date: document.getElementById('editStartDate').value,
-        membership_end_date: document.getElementById('editEndDate').value,
+        membership_start_date: document.getElementById('editStartDate').value || null,
+        membership_end_date: document.getElementById('editEndDate').value || null,
         status: document.getElementById('editStatus').value
     };
 
