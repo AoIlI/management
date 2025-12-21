@@ -11,7 +11,10 @@ public class Member {
     private String memberId;
     @Setter
     @Getter
-    private String name;
+    private String accountId;  // 关联账号ID
+    @Setter
+    @Getter
+    private String name;  // 真实姓名（可以重复）
     @Setter
     @Getter
     private String phone;
@@ -27,7 +30,4 @@ public class Member {
     @Setter
     @Getter
     private String status;
-    @Setter
-    @Getter
-    private String accountStatus;
 }

@@ -52,12 +52,12 @@ public class UserController {
         for (int i = 0; i < users.size(); i++) {
             User u = users.get(i);
             Row row = sheet.createRow(i + 1);
-            row.createCell(0).setCellValue(u.getMember_id());
+            row.createCell(0).setCellValue(u.getMemberId());
             row.createCell(1).setCellValue(u.getName());
             row.createCell(2).setCellValue(u.getPhone());
-            row.createCell(3).setCellValue(u.getMembership_type());
-            row.createCell(4).setCellValue(u.getMembership_start_date());
-            row.createCell(5).setCellValue(u.getMembership_end_date());
+            row.createCell(3).setCellValue(u.getMembershipType());
+            row.createCell(4).setCellValue(u.getMembershipStartDate());
+            row.createCell(5).setCellValue(u.getMembershipEndDate());
             row.createCell(6).setCellValue(u.getStatus());
         }
 

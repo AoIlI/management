@@ -19,9 +19,10 @@ public class RegisterController {
     @PostMapping("/register")
     public String register(@RequestParam String username,
                            @RequestParam String password,
-                           @RequestParam String phone) {
+                           @RequestParam String phone,
+                           @RequestParam(required = false) String realName) {
         try {
-            registerService.registerMember(username, password, phone);
+            registerService.registerMember(username, password, phone, realName);
             // 注册成功，跳回登录页
             return "redirect:/";
         } catch (RuntimeException e) {

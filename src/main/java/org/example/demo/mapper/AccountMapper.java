@@ -7,6 +7,8 @@ import org.example.demo.entity.Account;
 @Mapper
 public interface AccountMapper {
 
+    String selectMaxAccountId();
+
     int insert(Account account);
 
     Account selectByUsername(@Param("username") String username);
@@ -25,5 +27,7 @@ public interface AccountMapper {
     int updateBaseInfoByAccountId(@Param("accountId") String accountId,
                                   @Param("username") String username,
                                   @Param("phone") String phone);
+
+    int deleteByAccountId(@Param("accountId") String accountId);
 
 }

@@ -6,48 +6,54 @@
 <mapper namespace="org.example.demo.mapper.CourseManageMapper">
 
     <select id="selectAll" resultType="org.example.demo.entity.Fitness_classes">
-        SELECT class_id, class_name, coach_id, schedule_time, duration_minutes, max_capacity, current_enrollment
+        SELECT class_id AS classId, class_name AS className, coach_id AS coachId, 
+               day_of_week AS dayOfWeek, class_time AS classTime, duration_minutes AS durationMinutes, 
+               max_capacity AS maxCapacity, current_enrollment AS currentEnrollment
         FROM fitness_classes
-        WHERE coursestatus = 'ACTIVE'
     </select>
 
     <select id="getCourseById" parameterType="String"
             resultType="org.example.demo.entity.Fitness_classes">
-        SELECT class_id, class_name, coach_id, schedule_time, duration_minutes, max_capacity, current_enrollment
+        SELECT class_id AS classId, class_name AS className, coach_id AS coachId, 
+               day_of_week AS dayOfWeek, class_time AS classTime, duration_minutes AS durationMinutes, 
+               max_capacity AS maxCapacity, current_enrollment AS currentEnrollment
         FROM fitness_classes
-        WHERE coursestatus = 'ACTIVE' AND class_id = #{class_id}
+        WHERE class_id = #{classId}
     </select>
 
     <select id="searchCourses" resultType="org.example.demo.entity.Fitness_classes" parameterType="String">
-        SELECT * FROM fitness_classes
+        SELECT class_id AS classId, class_name AS className, coach_id AS coachId, 
+               day_of_week AS dayOfWeek, class_time AS classTime, duration_minutes AS durationMinutes, 
+               max_capacity AS maxCapacity, current_enrollment AS currentEnrollment
+        FROM fitness_classes
         WHERE (class_id LIKE CONCAT('%', #{keyword}, '%')
             OR class_name LIKE CONCAT('%', #{keyword}, '%')
-            OR coach_id LIKE CONCAT('%', #{keyword}, '%')) AND coursestatus = 'ACTIVE'
+            OR coach_id LIKE CONCAT('%', #{keyword}, '%'))
 
     </select>
     <update id="updateCourse" parameterType="org.example.demo.entity.Fitness_classes">
         UPDATE fitness_classes
         SET
-            class_name = #{class_name},
-            coach_id = #{coach_id},
-            schedule_time = #{schedule_time},
-            duration_minutes = #{duration_minutes},
-            max_capacity = #{max_capacity},
-            current_enrollment = #{current_enrollment}
-        WHERE class_id = #{class_id}
+            class_name = #{className},
+            coach_id = #{coachId},
+            day_of_week = #{dayOfWeek},
+            class_time = #{classTime},
+            duration_minutes = #{durationMinutes},
+            max_capacity = #{maxCapacity},
+            current_enrollment = #{currentEnrollment}
+        WHERE class_id = #{classId}
     </update>
 
     <delete id="deleteById" parameterType="String">
-        UPDATE fitness_classes
-        SET coursestatus = 'DISABLED'
-        WHERE class_id = #{class_id};
+        DELETE FROM fitness_classes
+        WHERE class_id = #{classId}
     </delete>
 
     <insert id="addCourse" parameterType="org.example.demo.entity.Fitness_classes">
         INSERT INTO fitness_classes
-        (class_id, class_name, coach_id, schedule_time, duration_minutes, max_capacity, current_enrollment, coursestatus)
+        (class_id, class_name, coach_id, day_of_week, class_time, duration_minutes, max_capacity, current_enrollment)
         VALUES
-            (#{class_id}, #{class_name}, #{coach_id}, #{schedule_time}, #{duration_minutes}, #{max_capacity}, #{current_enrollment}, 'ACTIVE')
+            (#{classId}, #{className}, #{coachId}, #{dayOfWeek}, #{classTime}, #{durationMinutes}, #{maxCapacity}, #{currentEnrollment})
     </insert>
 
 </mapper>

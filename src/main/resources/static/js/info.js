@@ -41,19 +41,37 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch('/api/info')
         .then(res => res.json())
         .then(data => {
+            console.log('========= API返回的完整数据 =========');
+            console.log(data);
+            console.log('所有字段名:', Object.keys(data));
+            console.log('memberId (驼峰):', data.memberId);
+            console.log('member_id (下划线):', data.member_id);
+            console.log('membershipType (驼峰):', data.membershipType);
+            console.log('membership_type (下划线):', data.membership_type);
+            console.log('====================================');
+
+            // 兼容两种命名方式：优先使用下划线，如果没有则使用驼峰
+            const memberId = data.member_id || data.memberId || '';
+            const membershipType = data.membership_type || data.membershipType || '';
+            const membershipStartDate = data.membership_start_date || data.membershipStartDate || '';
+            const membershipEndDate = data.membership_end_date || data.membershipEndDate || '';
+            const accountStatus = data.account_status || data.accountStatus || '';
+
+            console.log('解析后的值 - memberId:', memberId);
+            console.log('解析后的值 - membershipType:', membershipType);
 
             // 左侧展示
-            document.getElementById('nameText').innerText = data.name;
-            document.getElementById('memberId').innerText = data.memberId;
-            document.getElementById('membershipType').innerText = data.membershipType;
-            document.getElementById('status').innerText = data.status;
-            document.getElementById('avatar').innerText = data.name ? data.name.charAt(0) : 'U';
+            document.getElementById('nameText').innerText = data.name || '-';
+            document.getElementById('memberId').innerText = memberId || '-';
+            document.getElementById('membershipType').innerText = membershipType || '-';
+            document.getElementById('status').innerText = data.status || '-';
+            document.getElementById('avatar').innerText = data.name ? data.name.charAt(0).toUpperCase() : 'U';
 
             // 右侧表单
-            nameInput.value = data.name;
-            phoneInput.value = data.phone;
-            document.getElementById('dateRange').value = data.membershipStartDate + ' 至 ' + data.membershipEndDate;
-            document.getElementById('accountStatus').value = data.accountStatus;
+            nameInput.value = data.name || '';
+            phoneInput.value = data.phone || '';
+            document.getElementById('dateRange').value = membershipStartDate + (membershipStartDate && membershipEndDate ? ' 至 ' : '') + membershipEndDate;
+            document.getElementById('accountStatus').value = accountStatus;
 
             // 保存原始值
             originName = data.name;
@@ -61,7 +79,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             nameValid = true;
             phoneValid = true;
+        })
+        .catch(err => {
+            console.error('加载用户信息失败:', err);
         });
+
+    // 加载预约课程
+    loadBookings();
 
     /* ========= 修改资料按钮 ========= */
     editBtn.addEventListener("click", function () {
@@ -193,5 +217,92 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert("保存失败，请重试");
             });
     });
+
+    /* ========= 加载预约课程 ========= */
+    function loadBookings() {
+        const bookingList = document.getElementById('bookingList');
+        const bookingLoading = document.getElementById('bookingLoading');
+        const bookingEmpty = document.getElementById('bookingEmpty');
+
+        // TODO: 替换为实际的API接口
+        // 示例：fetch('/api/info/bookings')
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         bookingLoading.style.display = 'none';
+        //         if (data && data.length > 0) {
+        //             renderBookings(data);
+        //         } else {
+        //             bookingEmpty.style.display = 'block';
+        //         }
+        //     });
+
+        // 临时显示空状态（待API实现后替换）
+        setTimeout(() => {
+            bookingLoading.style.display = 'none';
+            bookingEmpty.style.display = 'block';
+        }, 500);
+    }
+
+    function renderBookings(bookings) {
+        const bookingList = document.getElementById('bookingList');
+        const bookingEmpty = document.getElementById('bookingEmpty');
+        bookingEmpty.style.display = 'none';
+
+        let html = `
+            <table class="booking-table">
+                <thead>
+                    <tr>
+                        <th>课程名称</th>
+                        <th>教练ID</th>
+                        <th>上课时间</th>
+                        <th>课程时长</th>
+                        <th>预约日期</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        bookings.forEach(booking => {
+            const statusClass = getStatusClass(booking.status || booking.booking_status);
+            const statusText = getStatusText(booking.status || booking.booking_status);
+            
+            html += `
+                <tr>
+                    <td>${booking.class_name || booking.className || '-'}</td>
+                    <td>${booking.coach_id || booking.coachId || '-'}</td>
+                    <td>${booking.schedule_time || booking.scheduleTime || '-'}</td>
+                    <td>${booking.duration_minutes || booking.durationMinutes || '-'}分钟</td>
+                    <td>${booking.booking_date || booking.bookingDate || '-'}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                </tr>
+            `;
+        });
+
+        html += `
+                </tbody>
+            </table>
+        `;
+
+        bookingList.innerHTML = html;
+    }
+
+    function getStatusClass(status) {
+        if (!status) return 'status-active';
+        const s = status.toLowerCase();
+        if (s === 'active' || s === '已预约' || s === 'confirmed') return 'status-active';
+        if (s === 'completed' || s === '已完成') return 'status-completed';
+        if (s === 'cancelled' || s === '已取消' || s === 'disabled') return 'status-cancelled';
+        return 'status-active';
+    }
+
+    function getStatusText(status) {
+        if (!status) return '未知';
+        const s = status.toLowerCase();
+        if (s === 'active' || s === 'confirmed') return '已预约';
+        if (s === 'completed') return '已完成';
+        if (s === 'cancelled' || s === 'disabled') return '已取消';
+        return status;
+    }
 
 });

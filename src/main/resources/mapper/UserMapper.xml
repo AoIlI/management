@@ -6,23 +6,29 @@
 <mapper namespace="org.example.demo.mapper.UserMapper">
 
     <select id="selectAll" resultType="org.example.demo.entity.User">
-        SELECT member_id, name, phone, membership_type, membership_start_date, membership_end_date, status
+        SELECT member_id AS memberId, account_id AS accountId, name, phone, membership_type AS membershipType, 
+               membership_start_date AS membershipStartDate, membership_end_date AS membershipEndDate, 
+               status
         FROM members
-        WHERE accountstatus = 'ACTIVE'
     </select>
 
     <select id="getUserById" parameterType="String"
             resultType="org.example.demo.entity.User">
-        SELECT member_id, name, phone, membership_type, membership_start_date, membership_end_date, status
+        SELECT member_id AS memberId, account_id AS accountId, name, phone, membership_type AS membershipType, 
+               membership_start_date AS membershipStartDate, membership_end_date AS membershipEndDate, 
+               status
         FROM members
-        WHERE accountstatus = 'ACTIVE' AND member_id = #{member_id}
+        WHERE member_id = #{memberId}
     </select>
 
     <select id="searchUsers" resultType="org.example.demo.entity.User" parameterType="String">
-        SELECT * FROM members
+        SELECT member_id AS memberId, account_id AS accountId, name, phone, membership_type AS membershipType, 
+               membership_start_date AS membershipStartDate, membership_end_date AS membershipEndDate, 
+               status
+        FROM members
         WHERE (member_id LIKE CONCAT('%', #{keyword}, '%')
         OR name LIKE CONCAT('%', #{keyword}, '%')
-        OR phone LIKE CONCAT('%', #{keyword}, '%')) AND accountstatus = 'ACTIVE'
+        OR phone LIKE CONCAT('%', #{keyword}, '%'))
 
     </select>
     <update id="updateUser" parameterType="org.example.demo.entity.User">
@@ -30,17 +36,16 @@
         SET
             name = #{name},
             phone = #{phone},
-            membership_type = #{membership_type},
-            membership_start_date = #{membership_start_date},
-            membership_end_date = #{membership_end_date},
+            membership_type = #{membershipType},
+            membership_start_date = #{membershipStartDate},
+            membership_end_date = #{membershipEndDate},
             status = #{status}
-        WHERE member_id = #{member_id}
+        WHERE member_id = #{memberId}
     </update>
 
     <delete id="deleteById" parameterType="String">
-        UPDATE members
-        SET accountstatus = 'DISABLED'
-        WHERE member_id = #{member_id};
+        DELETE FROM members
+        WHERE member_id = #{memberId}
     </delete>
 
 

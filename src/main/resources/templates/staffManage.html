@@ -10,13 +10,13 @@
 <!-- 顶栏 -->
 <div class="topbar">
     <div class="topbar-left">
-        欢迎，<span id="username">李华</span>
+        欢迎，<span id="username">管理员</span>
     </div>
     <div class="topbar-right">
         <button onclick="togglePopup()">更多 ▾</button>
         <div id="popup" class="popup">
             <p>角色：管理员</p>
-            <p>邮箱：test@test.com</p>
+            <p>邮箱：admin@fitness.com</p>
             <button>退出登录</button>
         </div>
     </div>
@@ -38,10 +38,139 @@
 
     <!-- 内容区域 -->
     <div class="content">
-        <h2>欢迎进入管理系统</h2>
+        <h2>员工管理</h2>
+
+        <!-- 表格工具栏 -->
+        <div class="table-toolbar">
+            <div class="toolbar-left">
+                <input type="text" id="searchInput" placeholder="搜索员工ID / 姓名 / 手机号 / 职位">
+                <button onclick="searchStaff()">搜索</button>
+                <button class="add-btn" onclick="openAddModal()">添加员工</button>
+            </div>
+            <div class="toolbar-right">
+                <button class="export-btn" onclick="exportExcel()">导出 Excel</button>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="user-table" id="staffTable">
+                <thead>
+                <tr>
+                    <th>员工ID</th>
+                    <th>账号ID</th>
+                    <th>姓名</th>
+                    <th>职位</th>
+                    <th>手机号</th>
+                    <th>邮箱</th>
+                    <th>专长</th>
+                    <th>入职日期</th>
+                    <th>状态</th>
+                    <th>部门</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- JS 动态插入 -->
+                </tbody>
+            </table>
+        </div>
+
+        <script src="/js/staffManage.js"></script>
     </div>
 </div>
 
 <script src="/js/main.js"></script>
+
+<!-- 修改员工弹窗 -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <h3>修改员工信息</h3>
+        <form id="editForm" onsubmit="submitEditForm(event)">
+            <label>员工ID（不可修改）</label>
+            <input type="text" id="editStaffId" name="staff_id" readonly>
+
+            <label>账号ID（不可修改）</label>
+            <input type="text" id="editAccountId" name="account_id" readonly>
+
+            <label>姓名</label>
+            <input type="text" id="editName" name="name" required>
+
+            <label>职位</label>
+            <select id="editRole" name="role" required>
+                <option value="教练">教练</option>
+                <option value="管理员">管理员</option>
+                <option value="前台">前台</option>
+            </select>
+
+            <label>手机号</label>
+            <input type="text" id="editPhone" name="phone" required pattern="^1\d{10}$" title="请输入11位手机号">
+
+            <label>邮箱</label>
+            <input type="email" id="editEmail" name="email">
+
+            <label>专长</label>
+            <input type="text" id="editSpecialty" name="specialty" placeholder="例如：力量训练、增肌">
+
+            <label>入职日期</label>
+            <input type="date" id="editHireDate" name="hire_date">
+
+            <label>状态</label>
+            <select id="editStatus" name="status" required>
+                <option value="在职">在职</option>
+                <option value="离职">离职</option>
+            </select>
+
+            <label>部门</label>
+            <input type="text" id="editDepartment" name="department" placeholder="例如：教练部、管理部">
+
+            <button type="submit">保存修改</button>
+        </form>
+    </div>
+</div>
+
+<!-- 添加员工弹窗 -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddModal()">&times;</span>
+        <h3>添加员工</h3>
+        <form id="addForm" onsubmit="submitAddForm(event)">
+            <label>姓名</label>
+            <input type="text" id="addName" name="name" required>
+
+            <label>职位</label>
+            <select id="addRole" name="role" required>
+                <option value="教练">教练</option>
+                <option value="管理员">管理员</option>
+                <option value="前台">前台</option>
+            </select>
+
+            <label>手机号</label>
+            <input type="text" id="addPhone" name="phone" required pattern="^1\d{10}$" title="请输入11位手机号">
+
+            <label>邮箱</label>
+            <input type="email" id="addEmail" name="email">
+
+            <label>专长</label>
+            <input type="text" id="addSpecialty" name="specialty" placeholder="例如：力量训练、增肌（教练必填）">
+
+            <label>入职日期</label>
+            <input type="date" id="addHireDate" name="hire_date">
+
+            <label>状态</label>
+            <select id="addStatus" name="status" required>
+                <option value="在职">在职</option>
+                <option value="离职">离职</option>
+            </select>
+
+            <label>部门</label>
+            <input type="text" id="addDepartment" name="department" placeholder="例如：教练部、管理部">
+
+            <button type="submit">添加员工</button>
+        </form>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
 </body>
 </html>

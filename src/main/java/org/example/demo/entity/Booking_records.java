@@ -6,16 +6,16 @@ import lombok.Setter;
 public class Booking_records {
     @Getter
     @Setter
-    private String booking_id;
+    private String bookingId;
     @Getter
     @Setter
-    private String member_id;
+    private String memberId;
     @Getter
     @Setter
-    private String class_id;
+    private String classId;
     @Getter
     @Setter
-    private String booking_date;
+    private String bookingDate;
     @Getter
     @Setter
     private String status;

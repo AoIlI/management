@@ -43,21 +43,28 @@ public class CourseManageController {
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet("Courses");
         Row header = sheet.createRow(0);
-        String[] titles = {"课程ID", "课程名", "教练ID", "预约时间", "课程时长", "课容量", "当前选课人数"};
+        String[] titles = {"课程ID", "课程名", "教练ID", "周几", "上课时间", "课程时长", "课容量", "当前选课人数"};
         for (int i = 0; i < titles.length; i++) {
             header.createCell(i).setCellValue(titles[i]);
         }
 
+        String[] weekDays = {"", "周一", "周二", "周三", "周四", "周五", "周六", "周日"};
         for (int i = 0; i < users.size(); i++) {
             Fitness_classes u = users.get(i);
             Row row = sheet.createRow(i + 1);
-            row.createCell(0).setCellValue(u.getClass_id());
-            row.createCell(1).setCellValue(u.getClass_name());
-            row.createCell(2).setCellValue(u.getCoach_id());
-            row.createCell(3).setCellValue(u.getSchedule_time());
-            row.createCell(4).setCellValue(u.getDuration_minutes());
-            row.createCell(5).setCellValue(u.getMax_capacity());
-            row.createCell(6).setCellValue(u.getCurrent_enrollment());
+            row.createCell(0).setCellValue(u.getClassId());
+            row.createCell(1).setCellValue(u.getClassName());
+            row.createCell(2).setCellValue(u.getCoachId());
+            // 周几
+            String dayOfWeekStr = (u.getDayOfWeek() != null && u.getDayOfWeek() >= 1 && u.getDayOfWeek() <= 7) 
+                    ? weekDays[u.getDayOfWeek()] : String.valueOf(u.getDayOfWeek());
+            row.createCell(3).setCellValue(dayOfWeekStr);
+            // 上课时间
+            String classTimeStr = (u.getClassTime() != null) ? u.getClassTime().toString() : "";
+            row.createCell(4).setCellValue(classTimeStr);
+            row.createCell(5).setCellValue(u.getDurationMinutes());
+            row.createCell(6).setCellValue(u.getMaxCapacity());
+            row.createCell(7).setCellValue(u.getCurrentEnrollment());
         }
 
         //  自动列宽（重点）

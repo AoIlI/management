@@ -1,102 +1,351 @@
-.content-inner {
-    max-width: 1100px;
-    margin: 30px 0 30px 30px; /* 左侧30px，取消自动居中 */
-    background: #fff;
-    border-radius: 6px;
-    box-shadow: 0 2px 12px rgba(0,0,0,.08);
-    padding: 30px;
+/* 基础样式重置 */
+* {
+    box-sizing: border-box;
 }
-.profile-body {
+
+/* 卡片容器区域 - 横向排列 */
+.info-cards-container {
     display: flex;
-    min-height: 360px;
     gap: 20px;
+    align-items: stretch; /* 让两个卡片高度一致 */
 }
+
+/* 卡片容器 */
+.info-card {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    flex: 1;
+    min-width: 0; /* 允许flex item缩小 */
+    display: flex;
+    flex-direction: column; /* 确保卡片内容垂直布局 */
+}
+
+.card-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #ebeef5;
+    background: #fafafa;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #303133;
+}
+
+.card-body {
+    padding: 20px;
+    flex: 1; /* 让card-body填充剩余空间 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 个人信息布局 */
+.profile-layout {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
 .profile-left {
-    width: 260px;
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-right: 20px;
     border-right: 1px solid #ebeef5;
-    padding-right: 25px;
-    text-align: center;
 }
 
 .profile-right {
     flex: 1;
-    padding-left: 40px;
+    min-width: 300px;
 }
 
+/* 头像样式 */
 .avatar {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    background: #409EFF;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #fff;
-    font-size: 36px;
-    line-height: 100px;
-    margin: 0 auto 15px;
-    text-align: center;
+    font-size: 32px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-.profile-left p {
-    margin: 6px 0;
-    color: #606266;
+/* 个人信息展示 */
+.profile-info {
+    width: 100%;
+}
+
+.info-item {
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+}
+
+.info-label {
+    color: #909399;
     font-size: 14px;
+    min-width: 80px;
 }
 
-.form-container {
-    max-width: 520px;
+.info-value {
+    color: #303133;
+    font-size: 14px;
+    font-weight: 500;
 }
 
-.form-row {
+/* 表单样式 */
+.info-form {
+    max-width: 500px;
+}
+
+.form-item {
     margin-bottom: 18px;
 }
 
-.form-row label {
+.form-label {
     display: block;
-    font-size: 14px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     color: #606266;
+    font-size: 14px;
+    font-weight: 500;
 }
 
-.form-row input {
+.form-input {
     width: 100%;
-    height: 36px;
-    padding: 0 10px;
+    height: 40px;
+    padding: 0 15px;
     border: 1px solid #dcdfe6;
     border-radius: 4px;
-    box-sizing: border-box;
+    font-size: 14px;
+    color: #606266;
+    transition: border-color 0.3s;
 }
 
-.form-row input:disabled {
-    background: #f5f7fa;
+.form-input:focus {
+    outline: none;
+    border-color: #409eff;
+}
+
+.form-input:disabled {
+    background-color: #f5f7fa;
+    color: #909399;
+    cursor: not-allowed;
 }
 
 .error-text {
     font-size: 12px;
-    color: #F56C6C;
-    margin-top: 4px;
+    color: #f56c6c;
+    margin-top: 5px;
     display: none;
 }
 
+.form-actions {
+    margin-top: 25px;
+    display: flex;
+    gap: 10px;
+}
+
+/* 按钮样式 */
 .btn {
-    padding: 8px 26px;
-    border-radius: 4px;
+    padding: 10px 20px;
     border: none;
+    border-radius: 4px;
+    font-size: 14px;
     cursor: pointer;
-    margin-right: 10px;
+    transition: all 0.3s;
+    outline: none;
 }
 
-.btn-edit {
-    background: #67C23A;
+.btn-primary {
+    background-color: #409eff;
     color: #fff;
 }
 
-.btn-save {
-    background: #409EFF;
-    color: #fff;
-    display: none;
+.btn-primary:hover {
+    background-color: #66b1ff;
 }
 
-.btn-cancel {
-    background: #909399;
+.btn-success {
+    background-color: #67c23a;
     color: #fff;
-    display: none;
+}
+
+.btn-success:hover {
+    background-color: #85ce61;
+}
+
+.btn-default {
+    background-color: #909399;
+    color: #fff;
+}
+
+.btn-default:hover {
+    background-color: #a6a9ad;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* 预约课程列表 */
+.booking-list {
+    min-height: 200px;
+    flex: 1; /* 让列表填充剩余空间 */
+    display: flex;
+    flex-direction: column;
+}
+
+.booking-list table {
+    flex: 1;
+}
+
+.loading, .empty-state {
+    text-align: center;
+    padding: 40px 0;
+    color: #909399;
+}
+
+.booking-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.booking-table thead {
+    background-color: #fafafa;
+}
+
+.booking-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 500;
+    color: #909399;
+    font-size: 14px;
+    border-bottom: 1px solid #ebeef5;
+}
+
+.booking-table td {
+    padding: 12px 15px;
+    color: #606266;
+    font-size: 14px;
+    border-bottom: 1px solid #ebeef5;
+}
+
+.booking-table tbody tr:hover {
+    background-color: #f5f7fa;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-active {
+    background-color: #f0f9ff;
+    color: #409eff;
+}
+
+.status-completed {
+    background-color: #f0f9ff;
+    color: #67c23a;
+}
+
+.status-cancelled {
+    background-color: #fef0f0;
+    color: #f56c6c;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+    /* 当窗口宽度小于1200px时，两个卡片改为上下排列 */
+    .info-cards-container {
+        flex-direction: column;
+    }
+
+    .info-card {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-layout {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .profile-left {
+        flex: 1;
+        border-right: none;
+        border-bottom: 1px solid #ebeef5;
+        padding-right: 0;
+        padding-bottom: 20px;
+    }
+
+    .profile-right {
+        min-width: 100%;
+    }
+
+    .info-form {
+        max-width: 100%;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+}
+
+/* 表格响应式 */
+@media (max-width: 768px) {
+    .booking-table {
+        font-size: 12px;
+    }
+
+    .booking-table th,
+    .booking-table td {
+        padding: 8px 10px;
+    }
+}
+
+/* 内容区域优化 */
+.content {
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* 确保在小屏幕上也能正常显示 */
+@media (max-width: 480px) {
+    .content {
+        padding: 10px;
+    }
+
+    .info-card {
+        margin-bottom: 15px;
+    }
+
+    .card-header {
+        padding: 12px 15px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
 }

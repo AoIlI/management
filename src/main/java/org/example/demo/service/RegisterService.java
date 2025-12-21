@@ -19,12 +19,13 @@ public class RegisterService {
         this.accountMapper = accountMapper;
     }
     /**
-     * 注册会员（你已经验证成功的主流程，不动）
+     * 注册会员
+     * 注意：username是昵称（全局唯一），name是真实姓名（可以重复）
      */
     @Transactional
-    public void registerMember(String username, String password, String phone) {
+    public void registerMember(String username, String password, String phone, String realName) {
 
-        // 1. 用户名不能重复
+        // 1. 用户名（昵称）不能重复
         if (accountMapper.selectByUsername(username) != null) {
             throw new RuntimeException("用户名已存在");
         }
@@ -34,30 +35,56 @@ public class RegisterService {
             throw new RuntimeException("手机号已存在");
         }
 
-        // 3. 生成新的 member_id
-        String maxId = memberMapper.selectMaxMemberId(); // M010
-        int next = Integer.parseInt(maxId.substring(1)) + 1;
-        String newMemberId = String.format("M%03d", next);
+        // 3. 生成新的 account_id（全局唯一账号ID）
+        String maxAccountId = accountMapper.selectMaxAccountId();
+        String newAccountId;
+        if (maxAccountId == null || maxAccountId.isEmpty()) {
+            newAccountId = "ACC0000001";
+        } else {
+            String numPart = maxAccountId.substring(3); // 提取数字部分
+            int next = Integer.parseInt(numPart) + 1;
+            newAccountId = String.format("ACC%07d", next);
+        }
 
-        // 4. 插入 members 表
+        // 4. 生成新的 member_id
+        String maxMemberId = memberMapper.selectMaxMemberId();
+        String newMemberId;
+        if (maxMemberId == null || maxMemberId.isEmpty()) {
+            newMemberId = "MEMBER0001";
+        } else {
+            // 处理格式：MEMBER0001 或 M001
+            String numPart;
+            if (maxMemberId.startsWith("MEMBER")) {
+                numPart = maxMemberId.substring(6); // MEMBER0001 -> 0001
+            } else if (maxMemberId.startsWith("M")) {
+                numPart = maxMemberId.substring(1); // M001 -> 001
+            } else {
+                numPart = maxMemberId;
+            }
+            int next = Integer.parseInt(numPart) + 1;
+            newMemberId = String.format("MEMBER%04d", next);
+        }
+
+        // 5. 先插入 accounts 表（因为members表有外键依赖）
+        Account account = new Account();
+        account.setAccountId(newAccountId);
+        account.setUsername(username);  // 昵称（全局唯一）
+        account.setPassword(password);  // 当前未加密（后续可加）
+        account.setPhone(phone);
+        account.setRole("member");
+
+        accountMapper.insert(account);
+
+        // 6. 插入 members 表（关联account_id）
         Member member = new Member();
         member.setMemberId(newMemberId);
-        member.setName(username);          // 简化：用户名即姓名
+        member.setAccountId(newAccountId);  // 关联账号ID
+        member.setName(realName != null && !realName.isBlank() ? realName : username);  // 真实姓名（可以重复）
         member.setPhone(phone);
         member.setMembershipType("普通会员");
         member.setStatus("正常");
 
         memberMapper.insert(member);
-
-        // 5. 插入 accounts 表
-        Account account = new Account();
-        account.setAccountId(newMemberId);
-        account.setUsername(username);
-        account.setPassword(password);     // 当前未加密（后续可加）
-        account.setPhone(phone);
-        account.setRole("member");
-
-        accountMapper.insert(account);
     }
     /* ================= 新增：供前端实时校验使用 ================= */
     /**

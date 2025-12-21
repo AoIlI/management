@@ -11,10 +11,10 @@
 
     <insert id="insert">
         INSERT INTO members
-        (member_id, name, phone, membership_type,
+        (member_id, account_id, name, phone, membership_type,
          membership_start_date, membership_end_date, status)
         VALUES
-            (#{memberId}, #{name}, #{phone}, #{membershipType},
+            (#{memberId}, #{accountId}, #{name}, #{phone}, #{membershipType},
              #{membershipStartDate}, #{membershipEndDate}, #{status})
     </insert>
 
@@ -22,13 +22,13 @@
             resultType="org.example.demo.entity.Member">
         SELECT
             member_id AS memberId,
+            account_id AS accountId,
             name,
             phone,
             membership_type AS membershipType,
             membership_start_date AS membershipStartDate,
             membership_end_date AS membershipEndDate,
-            status,
-            accountstatus
+            status
         FROM members
         WHERE member_id = #{memberId}
     </select>

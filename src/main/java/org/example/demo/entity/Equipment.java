@@ -6,7 +6,7 @@ import lombok.Setter;
 public class Equipment {
     @Getter
     @Setter
-    private String equipment_id;
+    private String equipmentId;
     @Getter
     @Setter
     private String name;
@@ -15,25 +15,25 @@ public class Equipment {
     private String status;
     @Getter
     @Setter
-    private String purchase_date;
+    private String purchaseDate;
     @Getter
     @Setter
     private Integer category;
     @Getter
     @Setter
-    private String health_status;
+    private String healthStatus;
     @Getter
     @Setter
-    private Integer service_life;
+    private Integer serviceLife;
     @Getter
     @Setter
-    private String last_maintenance_date;
+    private String lastMaintenanceDate;
     @Getter
     @Setter
-    private Integer maintenance_count;
+    private Integer maintenanceCount;
     @Getter
     @Setter
-    private Integer usage_count;
+    private Integer usageCount;
     @Getter
     @Setter
     private double price;

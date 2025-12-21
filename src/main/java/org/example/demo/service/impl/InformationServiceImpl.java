@@ -33,19 +33,12 @@ public class InformationServiceImpl implements InformationService {
             throw new RuntimeException("用户不存在");
         }
 
-        // ===== 用户名校验（仅在真的修改时）=====
-        if (name != null && !name.isBlank() && !name.equals(self.getName())) {
-
-            Member nameOwner = memberMapper.selectByField("name", name);
-            if (nameOwner != null && !memberId.equals(nameOwner.getMemberId())) {
-                throw new RuntimeException("用户名已存在");
-            }
-
-            Account a1 = accountMapper.selectByUsername(name);
-            if (a1 != null && !memberId.equals(a1.getAccountId())) {
-                throw new RuntimeException("用户名已存在");
-            }
+        String accountId = self.getAccountId();
+        if (accountId == null) {
+            throw new RuntimeException("账号关联信息不存在");
         }
+
+        // ===== 真实姓名（name）可以重复，直接更新即可 =====
         // ===== 手机号校验（仅在真的修改时）=====
         if (phone != null && !phone.equals(self.getPhone())) {
 
@@ -59,16 +52,19 @@ public class InformationServiceImpl implements InformationService {
             }
 
             Account a2 = accountMapper.selectByPhone(phone);
-            if (a2 != null && !memberId.equals(a2.getAccountId())) {
+            if (a2 != null && !accountId.equals(a2.getAccountId())) {
                 throw new RuntimeException("手机号已存在");
             }
         }
         // ===== 执行更新（使用旧值兜底）=====
+        // name是真实姓名，可以重复，直接更新
         String finalName = (name != null && !name.isBlank()) ? name : self.getName();
         String finalPhone = (phone != null) ? phone : self.getPhone();
 
+        // 更新members表的真实姓名和手机号
         memberMapper.updateBaseInfo(memberId, finalName, finalPhone);
-        accountMapper.updateUsernameAndPhone(memberId, finalName, finalPhone);
+        // 更新accounts表的手机号（username是昵称，不在这里更新）
+        accountMapper.updateUsernameAndPhone(accountId, null, finalPhone);
     }
 
 

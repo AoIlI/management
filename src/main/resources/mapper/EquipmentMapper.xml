@@ -6,7 +6,10 @@
 <mapper namespace="org.example.demo.mapper.EquipmentMapper">
 
     <select id="selectAll" resultType="org.example.demo.entity.Equipment">
-        SELECT name, equipment_id, category, purchase_date, status, health_status, last_maintenance_date, maintenance_count, service_life, usage_count, price, area
+        SELECT equipment_id AS equipmentId, name, category, purchase_date AS purchaseDate, 
+               status, health_status AS healthStatus, last_maintenance_date AS lastMaintenanceDate, 
+               maintenance_count AS maintenanceCount, service_life AS serviceLife, 
+               usage_count AS usageCount, price, area
         FROM equipment
     </select>
 
