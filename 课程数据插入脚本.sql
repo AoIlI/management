@@ -109,3 +109,6 @@ INSERT INTO fitness_classes (class_id, class_name, coach_id, schedule_time, dura
 -- 4. 建议先查询现有数据：SELECT * FROM fitness_classes;
 
 
+
+
+

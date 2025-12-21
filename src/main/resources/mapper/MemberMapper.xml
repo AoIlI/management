@@ -12,10 +12,11 @@
     <insert id="insert">
         INSERT INTO members
         (member_id, account_id, name, phone, membership_type,
-         membership_start_date, membership_end_date, status)
+         membership_start_date, membership_end_date, status, available_classes)
         VALUES
             (#{memberId}, #{accountId}, #{name}, #{phone}, #{membershipType},
-             #{membershipStartDate}, #{membershipEndDate}, #{status})
+             #{membershipStartDate}, #{membershipEndDate}, #{status}, 
+             COALESCE(#{availableClasses}, 3))
     </insert>
 
     <select id="selectByMemberId"
@@ -28,7 +29,9 @@
             membership_type AS membershipType,
             membership_start_date AS membershipStartDate,
             membership_end_date AS membershipEndDate,
-            status
+            status,
+            available_classes AS availableClasses,
+            last_reset_date AS lastResetDate
         FROM members
         WHERE member_id = #{memberId}
     </select>
@@ -58,5 +61,45 @@
         </choose>
         LIMIT 1
     </select>
+
+    <select id="selectByAccountId"
+            resultType="org.example.demo.entity.Member">
+        SELECT
+            member_id AS memberId,
+            account_id AS accountId,
+            name,
+            phone,
+            membership_type AS membershipType,
+            membership_start_date AS membershipStartDate,
+            membership_end_date AS membershipEndDate,
+            status,
+            available_classes AS availableClasses,
+            last_reset_date AS lastResetDate
+        FROM members
+        WHERE account_id = #{accountId}
+        LIMIT 1
+    </select>
+
+    <update id="updateAvailableClasses">
+        UPDATE members
+        SET available_classes = #{availableClasses}
+        WHERE member_id = #{memberId}
+    </update>
+
+    <update id="updateMembershipAndClasses">
+        UPDATE members
+        SET membership_type = #{membershipType},
+            membership_start_date = #{membershipStartDate},
+            membership_end_date = #{membershipEndDate},
+            available_classes = #{availableClasses},
+            last_reset_date = #{lastResetDate}
+        WHERE member_id = #{memberId}
+    </update>
+
+    <update id="addAvailableClasses">
+        UPDATE members
+        SET available_classes = available_classes + #{addCount}
+        WHERE member_id = #{memberId}
+    </update>
 
 </mapper>

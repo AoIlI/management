@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>课程预约</title>
+    <title>课程详情</title>
     <link rel="stylesheet" href="/css/user.css">
     <link rel="stylesheet" href="/css/order.css">
 </head>
@@ -18,7 +18,7 @@
         <button onclick="togglePopup()">更多 ▾</button>
         <div id="popup" class="popup">
             <p>角色：会员</p>
-            <button onclick="logout()">退出登录</button>
+            <button>退出登录</button>
         </div>
     </div>
 </div>
@@ -39,23 +39,10 @@
 
     <!-- 内容区域 -->
     <div class="content">
-        <div class="order-container">
-            <h2>课程预约</h2>
+        <div class="course-detail-container">
+            <a href="/order" class="btn-back">← 返回课程列表</a>
             
-            <!-- 筛选栏 -->
-            <div class="filter-bar">
-                <label>课程类型：</label>
-                <select id="categoryFilter" onchange="filterCourses()">
-                    <option value="">全部</option>
-                    <option value="瑜伽">瑜伽</option>
-                    <option value="力量训练">力量训练</option>
-                    <option value="有氧运动">有氧运动</option>
-                    <option value="HIIT">HIIT</option>
-                </select>
-            </div>
-
-            <!-- 课程网格 -->
-            <div class="courses-grid" id="coursesGrid">
+            <div id="courseDetailContent">
                 <div class="loading">加载中...</div>
             </div>
         </div>
@@ -63,6 +50,8 @@
 </div>
 
 <script src="/js/main.js"></script>
-<script src="/js/order.js"></script>
+<script src="/js/courseDetail.js"></script>
 </body>
 </html>
+
+

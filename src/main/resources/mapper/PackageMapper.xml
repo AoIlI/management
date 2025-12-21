@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.demo.mapper.PackageMapper">
+
+    <select id="selectAll" resultType="org.example.demo.entity.Package">
+        SELECT package_id AS packageId, package_name AS packageName, package_type AS packageType,
+               membership_type AS membershipType, classes_count AS classesCount, price,
+               description, classes_per_month AS classesPerMonth, validity_days AS validityDays,
+               status, create_time AS createTime, update_time AS updateTime
+        FROM packages
+        WHERE status = '启用'
+        ORDER BY package_type, price
+    </select>
+
+    <select id="selectByPackageId" resultType="org.example.demo.entity.Package">
+        SELECT package_id AS packageId, package_name AS packageName, package_type AS packageType,
+               membership_type AS membershipType, classes_count AS classesCount, price,
+               description, classes_per_month AS classesPerMonth, validity_days AS validityDays,
+               status, create_time AS createTime, update_time AS updateTime
+        FROM packages
+        WHERE package_id = #{packageId}
+    </select>
+
+    <select id="selectByType" resultType="org.example.demo.entity.Package">
+        SELECT package_id AS packageId, package_name AS packageName, package_type AS packageType,
+               membership_type AS membershipType, classes_count AS classesCount, price,
+               description, classes_per_month AS classesPerMonth, validity_days AS validityDays,
+               status, create_time AS createTime, update_time AS updateTime
+        FROM packages
+        WHERE package_type = #{packageType} AND status = '启用'
+        ORDER BY price
+    </select>
+
+    <insert id="insert" parameterType="org.example.demo.entity.Package">
+        INSERT INTO packages
+        (package_id, package_name, package_type, membership_type, classes_count, price,
+         description, classes_per_month, validity_days, status)
+        VALUES
+            (#{packageId}, #{packageName}, #{packageType}, #{membershipType}, #{classesCount}, #{price},
+             #{description}, #{classesPerMonth}, #{validityDays}, #{status})
+    </insert>
+
+    <update id="update" parameterType="org.example.demo.entity.Package">
+        UPDATE packages
+        SET package_name = #{packageName},
+            package_type = #{packageType},
+            membership_type = #{membershipType},
+            classes_count = #{classesCount},
+            price = #{price},
+            description = #{description},
+            classes_per_month = #{classesPerMonth},
+            validity_days = #{validityDays},
+            status = #{status}
+        WHERE package_id = #{packageId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM packages
+        WHERE package_id = #{packageId}
+    </delete>
+
+</mapper>
+
+
+

@@ -20,22 +20,29 @@ public class InformationServiceImpl implements InformationService {
 
 
     @Override
-    public Member getMemberInfo(String memberId) {
-        return memberMapper.selectByMemberId(memberId);
+    public Member getMemberInfo(String accountId) {
+        // 通过accountId查找member（因为session中存储的是accountId）
+        return memberMapper.selectByAccountId(accountId);
+    }
+
+    @Override
+    public Account getAccountInfo(String accountId) {
+        // 通过accountId查找account信息
+        return accountMapper.selectByAccountId(accountId);
     }
 
     @Override
     @Transactional
-    public void updateMemberBaseInfo(String memberId, String name, String phone) {
+    public void updateMemberBaseInfo(String accountId, String name, String phone) {
 
-        Member self = memberMapper.selectByMemberId(memberId);
+        Member self = memberMapper.selectByAccountId(accountId);
         if (self == null) {
             throw new RuntimeException("用户不存在");
         }
 
-        String accountId = self.getAccountId();
-        if (accountId == null) {
-            throw new RuntimeException("账号关联信息不存在");
+        String memberId = self.getMemberId();
+        if (memberId == null) {
+            throw new RuntimeException("会员信息不存在");
         }
 
         // ===== 真实姓名（name）可以重复，直接更新即可 =====
@@ -69,11 +76,15 @@ public class InformationServiceImpl implements InformationService {
 
 
     @Override
-    public boolean isUnique(String selfId, String field, String value) {
+    public boolean isUnique(String accountId, String field, String value) {
+        Member self = memberMapper.selectByAccountId(accountId);
+        if (self == null) {
+            return true;
+        }
 
         Member m = memberMapper.selectByField(field, value);
         if (m == null) return true;
 
-        return selfId.equals(m.getMemberId());
+        return self.getMemberId().equals(m.getMemberId());
     }
 }

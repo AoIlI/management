@@ -1,0 +1,378 @@
+/* 购买课程页面样式 */
+.purchase-container {
+    padding: 20px;
+}
+
+.packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.package-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.package-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.package-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 48px;
+    font-weight: bold;
+    position: relative;
+}
+
+.package-image.year-card {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.package-image.quarter-card {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.package-image.month-card {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.package-image.class-pack {
+    background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+}
+
+.package-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.package-info {
+    padding: 20px;
+}
+
+.package-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.package-price {
+    font-size: 32px;
+    font-weight: bold;
+    color: #f5576c;
+    margin-bottom: 15px;
+}
+
+.package-price .currency {
+    font-size: 20px;
+}
+
+.package-features {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.package-features li {
+    padding: 8px 0;
+    color: #666;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.package-features li:before {
+    content: "✓";
+    color: #67c23a;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.package-action {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-purchase {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-purchase:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* 套餐详情页样式 */
+.package-detail-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.package-detail-header {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.package-detail-image {
+    width: 400px;
+    height: 300px;
+    border-radius: 12px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 64px;
+    font-weight: bold;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.package-detail-info {
+    flex: 1;
+}
+
+.package-detail-title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.package-detail-price {
+    font-size: 48px;
+    font-weight: bold;
+    color: #f5576c;
+    margin-bottom: 20px;
+}
+
+.package-detail-features {
+    margin-top: 30px;
+}
+
+.package-description {
+    margin-top: 30px;
+    padding: 30px;
+    background: #f5f7fa;
+    border-radius: 12px;
+}
+
+.package-description h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.package-description p {
+    line-height: 1.8;
+    color: #666;
+    font-size: 16px;
+}
+
+.purchase-actions {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.btn-buy-large {
+    padding: 18px 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-buy-large:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+/* 支付弹框样式 */
+.payment-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s;
+}
+
+.payment-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.payment-modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.payment-modal-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.payment-modal-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 28px;
+}
+
+.payment-amount {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.payment-amount .label {
+    color: #999;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.payment-amount .amount {
+    font-size: 36px;
+    font-weight: bold;
+    color: #f5576c;
+}
+
+.qr-code-area {
+    width: 100%;
+    height: 300px;
+    background: #f5f7fa;
+    border: 2px dashed #ddd;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    font-size: 18px;
+    color: #999;
+}
+
+.payment-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-confirm-payment {
+    flex: 1;
+    padding: 14px;
+    background: #67c23a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-confirm-payment:hover {
+    background: #5daf34;
+}
+
+.btn-cancel-payment {
+    flex: 1;
+    padding: 14px;
+    background: #909399;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-cancel-payment:hover {
+    background: #73767a;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.close-modal:hover {
+    color: #333;
+}
+
+
+

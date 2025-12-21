@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.example.demo.mapper.PurchaseMapper">
+
+    <select id="selectMaxPurchaseId" resultType="string">
+        SELECT MAX(purchase_id) FROM purchase_records
+    </select>
+
+    <insert id="insert" parameterType="org.example.demo.entity.PurchaseRecord">
+        INSERT INTO purchase_records
+        (purchase_id, member_id, package_id, amount, payment_status, purchase_time, payment_time)
+        VALUES
+            (#{purchaseId}, #{memberId}, #{packageId}, #{amount}, #{paymentStatus}, 
+             #{purchaseTime}, #{paymentTime})
+    </insert>
+
+    <select id="selectByPurchaseId" resultType="org.example.demo.entity.PurchaseRecord">
+        SELECT purchase_id AS purchaseId, member_id AS memberId, package_id AS packageId,
+               amount, payment_status AS paymentStatus, purchase_time AS purchaseTime,
+               payment_time AS paymentTime
+        FROM purchase_records
+        WHERE purchase_id = #{purchaseId}
+    </select>
+
+    <update id="updatePaymentStatus">
+        UPDATE purchase_records
+        SET payment_status = #{paymentStatus},
+            payment_time = CASE WHEN #{paymentStatus} = '已支付' THEN NOW() ELSE payment_time END
+        WHERE purchase_id = #{purchaseId}
+    </update>
+
+    <select id="selectByMemberId" resultType="org.example.demo.entity.PurchaseRecord">
+        SELECT purchase_id AS purchaseId, member_id AS memberId, package_id AS packageId,
+               amount, payment_status AS paymentStatus, purchase_time AS purchaseTime,
+               payment_time AS paymentTime
+        FROM purchase_records
+        WHERE member_id = #{memberId}
+        ORDER BY purchase_time DESC
+    </select>
+
+</mapper>
+
+
+

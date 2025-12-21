@@ -74,3 +74,6 @@ INSERT INTO fitness_classes (class_id, class_name, coach_id, schedule_time, dura
 -- 4. 执行前请确保表中没有相同的 class_id，或先清空/删除现有数据
 
 
+
+
+

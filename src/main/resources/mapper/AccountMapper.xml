@@ -24,6 +24,18 @@
             LIMIT 1
     </select>
 
+    <select id="selectByAccountId"
+            resultType="org.example.demo.entity.Account">
+        SELECT
+            account_id AS accountId,
+            username,
+            password,
+            phone,
+            role
+        FROM accounts
+        WHERE account_id = #{accountId}
+    </select>
+
     <select id="selectByUsernameAndPassword"
             resultType="org.example.demo.entity.Account">
         SELECT

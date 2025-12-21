@@ -19,4 +19,19 @@ public interface MemberMapper {
 
     Member selectByField(@Param("field") String field,
                          @Param("value") String value);
+    
+    Member selectByAccountId(@Param("accountId") String accountId);
+    
+    int updateAvailableClasses(@Param("memberId") String memberId, 
+                              @Param("availableClasses") Integer availableClasses);
+    
+    int updateMembershipAndClasses(@Param("memberId") String memberId,
+                                   @Param("membershipType") String membershipType,
+                                   @Param("membershipStartDate") java.time.LocalDate membershipStartDate,
+                                   @Param("membershipEndDate") java.time.LocalDate membershipEndDate,
+                                   @Param("availableClasses") Integer availableClasses,
+                                   @Param("lastResetDate") java.time.LocalDate lastResetDate);
+    
+    int addAvailableClasses(@Param("memberId") String memberId,
+                           @Param("addCount") Integer addCount);
 }

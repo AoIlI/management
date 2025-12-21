@@ -1,12 +1,15 @@
 package org.example.demo.service;
 
+import org.example.demo.entity.Account;
 import org.example.demo.entity.Member;
 
 public interface InformationService {
 
-    Member getMemberInfo(String memberId);
+    Member getMemberInfo(String accountId);  // 通过accountId获取会员信息
 
-    void updateMemberBaseInfo(String memberId, String name, String phone);
+    Account getAccountInfo(String accountId);  // 通过accountId获取账号信息
 
-    boolean isUnique(String selfId, String field, String value);
+    void updateMemberBaseInfo(String accountId, String name, String phone);
+
+    boolean isUnique(String accountId, String field, String value);
 }

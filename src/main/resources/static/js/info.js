@@ -1,3 +1,48 @@
+// 全局函数：取消预约（需要在全局作用域，以便onclick可以访问）
+function cancelBooking(bookingId) {
+    if (!bookingId) {
+        console.error('bookingId为空');
+        alert('预约ID无效');
+        return;
+    }
+    
+    if (!confirm("确定要取消该预约吗？")) {
+        return;
+    }
+    
+    console.log('取消预约，bookingId:', bookingId);
+    
+    fetch(`/api/order/cancel/${bookingId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(res => {
+            console.log('取消预约响应状态:', res.status);
+            if (!res.ok) {
+                return res.json().then(err => {
+                    throw new Error(err.message || '取消预约失败');
+                });
+            }
+            return res.json();
+        })
+        .then(result => {
+            console.log('取消预约结果:', result);
+            if (result.success) {
+                alert('取消预约成功');
+                // 刷新整个页面，确保所有数据同步更新
+                location.reload();
+            } else {
+                alert('取消预约失败：' + (result.message || '未知错误'));
+            }
+        })
+        .catch(err => {
+            console.error('取消预约失败', err);
+            alert('取消预约失败：' + (err.message || '请重试'));
+        });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
     console.log("info.js running");
@@ -60,22 +105,38 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('解析后的值 - memberId:', memberId);
             console.log('解析后的值 - membershipType:', membershipType);
 
-            // 左侧展示
-            document.getElementById('nameText').innerText = data.name || '-';
+            // 统一状态值：优先使用account_status，如果没有则使用status
+            const displayStatus = accountStatus || data.status || '-';
+            
+            // 获取用户名和真实姓名
+            const username = data.username || data.user_name || '-';
+            const realName = data.name || '';
+            
+            // 左侧展示：显示用户名
+            document.getElementById('usernameText').innerText = username;
             document.getElementById('memberId').innerText = memberId || '-';
             document.getElementById('membershipType').innerText = membershipType || '-';
-            document.getElementById('status').innerText = data.status || '-';
-            document.getElementById('avatar').innerText = data.name ? data.name.charAt(0).toUpperCase() : 'U';
+            document.getElementById('status').innerText = displayStatus;
+            // 头像显示用户名的首字母
+            document.getElementById('avatar').innerText = username && username !== '-' ? username.charAt(0).toUpperCase() : 'U';
+            
+            // 显示可用课程次数
+            const availableClasses = data.available_classes !== undefined ? data.available_classes : 
+                                   (data.availableClasses !== undefined ? data.availableClasses : 0);
+            const availableClassesElement = document.getElementById('availableClasses');
+            if (availableClassesElement) {
+                availableClassesElement.innerText = availableClasses + ' 次';
+            }
 
-            // 右侧表单
-            nameInput.value = data.name || '';
+            // 右侧表单：显示真实姓名（可以修改）
+            nameInput.value = realName || '';
             phoneInput.value = data.phone || '';
             document.getElementById('dateRange').value = membershipStartDate + (membershipStartDate && membershipEndDate ? ' 至 ' : '') + membershipEndDate;
-            document.getElementById('accountStatus').value = accountStatus;
+            document.getElementById('accountStatus').value = displayStatus;
 
             // 保存原始值
-            originName = data.name;
-            originPhone = data.phone;
+            originName = realName || '';
+            originPhone = data.phone || '';
 
             nameValid = true;
             phoneValid = true;
@@ -83,9 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(err => {
             console.error('加载用户信息失败:', err);
         });
-
-    // 加载预约课程
-    loadBookings();
 
     /* ========= 修改资料按钮 ========= */
     editBtn.addEventListener("click", function () {
@@ -115,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
         cancelBtn.style.display = "none";
     });
 
-    /* ========= 用户名校验 ========= */
+    /* ========= 真实姓名校验（可以重复，可以为空） ========= */
     nameInput.addEventListener("input", function () {
         const value = nameInput.value.trim();
 
@@ -125,23 +183,9 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        // 真实姓名可以为空，也可以重复，所以不需要唯一性验证
         hideError(nameError);
-        nameValid = false;
-
-        if (value.length === 0) {
-            showError(nameError, "用户名不能为空");
-            return;
-        }
-
-        checkUnique("name", value).then(unique => {
-            if (!unique) {
-                showError(nameError, "用户名已存在");
-                nameValid = false;
-            } else {
-                hideError(nameError);
-                nameValid = true;
-            }
-        });
+        nameValid = true;  // 真实姓名总是有效的
     });
 
     /* ========= 手机号校验 ========= */
@@ -208,9 +252,50 @@ document.addEventListener("DOMContentLoaded", function () {
                 cancelBtn.style.display = "none";
                 editBtn.style.display = "inline-block";
 
-                // 左侧同步更新
-                document.getElementById("nameText").innerText = payload.name;
-                document.getElementById("avatar").innerText = payload.name ? payload.name.charAt(0) : "U";
+                // 重新加载用户信息，确保左右两侧完全同步
+                fetch('/api/info')
+                    .then(res => res.json())
+                    .then(data => {
+                        // 兼容两种命名方式
+                        const memberId = data.member_id || data.memberId || '';
+                        const membershipType = data.membership_type || data.membershipType || '';
+                        const membershipStartDate = data.membership_start_date || data.membershipStartDate || '';
+                        const membershipEndDate = data.membership_end_date || data.membershipEndDate || '';
+                        const accountStatus = data.account_status || data.accountStatus || '';
+                        const displayStatus = accountStatus || data.status || '-';
+                        const availableClasses = data.available_classes !== undefined ? data.available_classes : 
+                                               (data.availableClasses !== undefined ? data.availableClasses : 0);
+                        
+                        // 获取用户名和真实姓名
+                        const username = data.username || data.user_name || '-';
+                        const realName = data.name || '';
+                        
+                        // 左侧同步更新：显示用户名
+                        document.getElementById("usernameText").innerText = username;
+                        document.getElementById("avatar").innerText = username && username !== '-' ? username.charAt(0).toUpperCase() : "U";
+                        document.getElementById("memberId").innerText = memberId || '-';
+                        document.getElementById("membershipType").innerText = membershipType || '-';
+                        document.getElementById("status").innerText = displayStatus;
+                        
+                        const availableClassesElement = document.getElementById('availableClasses');
+                        if (availableClassesElement) {
+                            availableClassesElement.innerText = availableClasses + ' 次';
+                        }
+                        
+                        // 右侧同步更新
+                        document.getElementById('dateRange').value = membershipStartDate + (membershipStartDate && membershipEndDate ? ' 至 ' : '') + membershipEndDate;
+                        document.getElementById('accountStatus').value = displayStatus;
+                        
+                        // 更新原始值
+                        originName = payload.name;
+                        originPhone = payload.phone;
+                    })
+                    .catch(err => {
+                        console.error('重新加载用户信息失败:', err);
+                        // 即使失败也更新基本字段
+                        document.getElementById("nameText").innerText = payload.name;
+                        document.getElementById("avatar").innerText = payload.name ? payload.name.charAt(0) : "U";
+                    });
             })
             .catch(err => {
                 console.error(err);
@@ -219,78 +304,158 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     /* ========= 加载预约课程 ========= */
-    function loadBookings() {
+    // 将loadBookings定义为全局函数，以便cancelBooking可以调用
+    window.loadBookings = function() {
         const bookingList = document.getElementById('bookingList');
         const bookingLoading = document.getElementById('bookingLoading');
         const bookingEmpty = document.getElementById('bookingEmpty');
 
-        // TODO: 替换为实际的API接口
-        // 示例：fetch('/api/info/bookings')
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         bookingLoading.style.display = 'none';
-        //         if (data && data.length > 0) {
-        //             renderBookings(data);
-        //         } else {
-        //             bookingEmpty.style.display = 'block';
-        //         }
-        //     });
+        if (bookingLoading) bookingLoading.style.display = 'block';
+        if (bookingEmpty) bookingEmpty.style.display = 'none';
 
-        // 临时显示空状态（待API实现后替换）
-        setTimeout(() => {
-            bookingLoading.style.display = 'none';
-            bookingEmpty.style.display = 'block';
-        }, 500);
-    }
+        fetch('/api/order/my-bookings')
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('获取预约记录失败');
+                }
+                return res.json();
+            })
+            .then(data => {
+                console.log('加载的预约记录数据:', data);
+                if (bookingLoading) bookingLoading.style.display = 'none';
+                if (data && data.length > 0) {
+                    // 过滤掉"已取消"状态的记录，只显示有效的预约记录
+                    const validBookings = data.filter(booking => {
+                        const status = booking.status || '';
+                        const statusLower = status.toLowerCase();
+                        // 只显示"已确认"状态的记录，过滤掉"已取消"的记录
+                        return statusLower === '已确认' || statusLower === 'confirmed' || statusLower === 'active';
+                    });
+                    
+                    if (validBookings.length > 0) {
+                        renderBookings(validBookings);
+                    } else {
+                        if (bookingEmpty) bookingEmpty.style.display = 'block';
+                    }
+                } else {
+                    if (bookingEmpty) bookingEmpty.style.display = 'block';
+                }
+            })
+            .catch(err => {
+                console.error('加载预约记录失败', err);
+                if (bookingLoading) bookingLoading.style.display = 'none';
+                if (bookingEmpty) bookingEmpty.style.display = 'block';
+            });
+    };
+    
+    // 立即调用一次
+    loadBookings();
 
     function renderBookings(bookings) {
+        console.log('renderBookings 收到的数据:', bookings);
         const bookingList = document.getElementById('bookingList');
         const bookingEmpty = document.getElementById('bookingEmpty');
         bookingEmpty.style.display = 'none';
 
-        let html = `
-            <table class="booking-table">
-                <thead>
-                    <tr>
-                        <th>课程名称</th>
-                        <th>教练ID</th>
-                        <th>上课时间</th>
-                        <th>课程时长</th>
-                        <th>预约日期</th>
-                        <th>状态</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
+        if (!bookings || bookings.length === 0) {
+            bookingEmpty.style.display = 'block';
+            bookingList.innerHTML = '';
+            return;
+        }
 
-        bookings.forEach(booking => {
-            const statusClass = getStatusClass(booking.status || booking.booking_status);
-            const statusText = getStatusText(booking.status || booking.booking_status);
+        // 显示所有状态的记录，包括"已取消"
+        bookingList.innerHTML = bookings.map(booking => {
+            console.log('处理预约记录:', booking);
+            // 兼容snake_case和camelCase格式
+            const bookingId = booking.booking_id || booking.bookingId || '';
+            const status = booking.status || '';
+            const dayOfWeek = booking.day_of_week !== undefined ? booking.day_of_week : booking.dayOfWeek;
+            const classTime = booking.class_time || booking.classTime;
+            const className = booking.class_name || booking.className || '课程信息未知';
+            const coachId = booking.coach_id || booking.coachId || '-';
+            const durationMinutes = booking.duration_minutes !== undefined ? booking.duration_minutes : booking.durationMinutes;
+            const bookingDate = booking.booking_date || booking.bookingDate;
             
-            html += `
-                <tr>
-                    <td>${booking.class_name || booking.className || '-'}</td>
-                    <td>${booking.coach_id || booking.coachId || '-'}</td>
-                    <td>${booking.schedule_time || booking.scheduleTime || '-'}</td>
-                    <td>${booking.duration_minutes || booking.durationMinutes || '-'}分钟</td>
-                    <td>${booking.booking_date || booking.bookingDate || '-'}</td>
-                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                </tr>
+            console.log('预约记录状态:', status, 'bookingId:', bookingId);
+            
+            const statusClass = getStatusClass(status);
+            const statusText = getStatusText(status);
+            const dayOfWeekText = getDayOfWeekText(dayOfWeek);
+            const classTimeStr = formatClassTime(classTime) || '-';
+            const bookingDateStr = formatBookingDate(bookingDate);
+            
+            return `
+                <div class="booking-item">
+                    <div class="booking-item-info">
+                        <div class="booking-item-title">${escapeHtml(className)}</div>
+                        <div class="booking-item-meta">
+                            <span>📅 ${dayOfWeekText} ${classTimeStr}</span>
+                            <span style="margin-left: 15px;">⏱️ ${durationMinutes || 0}分钟</span>
+                            <span style="margin-left: 15px;">👤 教练：${escapeHtml(coachId)}</span>
+                            <span style="margin-left: 15px;">📝 预约时间：${bookingDateStr}</span>
+                        </div>
+                    </div>
+                    <div class="booking-item-actions">
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        ${status === '已确认' ? `<button class="btn-cancel" onclick="cancelBooking('${bookingId}')">取消预约</button>` : ''}
+                    </div>
+                </div>
             `;
-        });
-
-        html += `
-                </tbody>
-            </table>
-        `;
-
-        bookingList.innerHTML = html;
+        }).join('');
     }
+    
+    function formatClassTime(classTime) {
+        if (!classTime) return '';
+        
+        // 如果是字符串，直接返回
+        if (typeof classTime === 'string') {
+            return classTime;
+        }
+        
+        // 如果是对象（LocalTime序列化后的格式），提取时间部分
+        if (typeof classTime === 'object') {
+            if (classTime.hour !== undefined && classTime.minute !== undefined) {
+                const hour = String(classTime.hour).padStart(2, '0');
+                const minute = String(classTime.minute).padStart(2, '0');
+                return `${hour}:${minute}`;
+            }
+            if (Array.isArray(classTime)) {
+                return classTime.map(n => String(n).padStart(2, '0')).join(':');
+            }
+        }
+        
+        return String(classTime);
+    }
+    
+    function escapeHtml(text) {
+        if (!text) return '';
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+    
+    function getDayOfWeekText(dayOfWeek) {
+        const days = ['', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+        return days[dayOfWeek] || '';
+    }
+    
+    function formatBookingDate(dateStr) {
+        if (!dateStr) return '-';
+        // 处理日期格式：2024-11-15 10:30:00 -> 2024-11-15 10:30
+        return dateStr.replace('T', ' ').substring(0, 16);
+    }
+    
+    // cancelBooking函数已移到全局作用域，这里不再重复定义
 
     function getStatusClass(status) {
         if (!status) return 'status-active';
         const s = status.toLowerCase();
-        if (s === 'active' || s === '已预约' || s === 'confirmed') return 'status-active';
+        if (s === 'active' || s === '已预约' || s === 'confirmed' || s === '已确认') return 'status-active';
         if (s === 'completed' || s === '已完成') return 'status-completed';
         if (s === 'cancelled' || s === '已取消' || s === 'disabled') return 'status-cancelled';
         return 'status-active';
@@ -299,9 +464,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function getStatusText(status) {
         if (!status) return '未知';
         const s = status.toLowerCase();
-        if (s === 'active' || s === 'confirmed') return '已预约';
-        if (s === 'completed') return '已完成';
-        if (s === 'cancelled' || s === 'disabled') return '已取消';
+        if (s === 'active' || s === 'confirmed' || s === '已确认') return '已确认';
+        if (s === 'completed' || s === '已完成') return '已完成';
+        if (s === 'cancelled' || s === '已取消' || s === 'disabled') return '已取消';
         return status;
     }
 

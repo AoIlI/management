@@ -202,6 +202,7 @@
     flex: 1; /* 让列表填充剩余空间 */
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 .booking-list table {
@@ -264,6 +265,63 @@
 .status-cancelled {
     background-color: #fef0f0;
     color: #f56c6c;
+}
+
+/* 预约记录项样式 */
+.booking-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #f5f7fa;
+    border-radius: 8px;
+    border-left: 4px solid #409eff;
+    transition: all 0.3s;
+}
+
+.booking-item:hover {
+    background: #ecf5ff;
+    box-shadow: 0 2px 8px rgba(64, 158, 255, 0.2);
+}
+
+.booking-item-info {
+    flex: 1;
+}
+
+.booking-item-title {
+    font-weight: bold;
+    color: #303133;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.booking-item-meta {
+    font-size: 14px;
+    color: #606266;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.booking-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-cancel {
+    padding: 6px 15px;
+    background: #f56c6c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-cancel:hover {
+    background: #e85a5a;
 }
 
 /* 响应式设计 */

@@ -71,4 +71,13 @@ public class PageController {
         // 返回204 No Content，避免404错误
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    @GetMapping("/courseDetail")
+    public String courseDetail() {
+        return "courseDetail"; // 对应 templates/courseDetail.html
+    }
+
+    @GetMapping("/packageDetail")
+    public String packageDetail() {
+        return "packageDetail"; // 对应 templates/packageDetail.html
+    }
 }

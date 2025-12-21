@@ -79,10 +79,14 @@ public class RegisterService {
         Member member = new Member();
         member.setMemberId(newMemberId);
         member.setAccountId(newAccountId);  // 关联账号ID
-        member.setName(realName != null && !realName.isBlank() ? realName : username);  // 真实姓名（可以重复）
+        // 真实姓名可以为空，新注册用户需要自己去修改
+        // 使用空字符串而不是null，因为数据库字段是NOT NULL
+        member.setName(realName != null && !realName.isBlank() ? realName : "");  // 真实姓名（可以重复，可以为空）
         member.setPhone(phone);
         member.setMembershipType("普通会员");
         member.setStatus("正常");
+        member.setAvailableClasses(3);  // 普通会员默认3次
+        member.setLastResetDate(null);  // 普通会员不按月重置
 
         memberMapper.insert(member);
     }

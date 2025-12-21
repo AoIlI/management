@@ -19,4 +19,10 @@ public class Booking_records {
     @Getter
     @Setter
     private String status;
+    @Getter
+    @Setter
+    private Boolean attended;  // 是否已上课
+    @Getter
+    @Setter
+    private String attendedTime;  // 上课时间
 }

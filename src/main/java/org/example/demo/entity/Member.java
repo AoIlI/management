@@ -30,4 +30,10 @@ public class Member {
     @Setter
     @Getter
     private String status;
+    @Setter
+    @Getter
+    private Integer availableClasses;  // 可用课程次数
+    @Setter
+    @Getter
+    private LocalDate lastResetDate;  // 上次重置次数日期
 }

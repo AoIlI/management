@@ -30,4 +30,6 @@ public interface AccountMapper {
 
     int deleteByAccountId(@Param("accountId") String accountId);
 
+    Account selectByAccountId(@Param("accountId") String accountId);
+
 }

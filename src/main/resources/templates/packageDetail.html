@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>课程预约</title>
+    <title>套餐详情</title>
     <link rel="stylesheet" href="/css/user.css">
-    <link rel="stylesheet" href="/css/order.css">
+    <link rel="stylesheet" href="/css/purchase.css">
 </head>
 <body>
 
@@ -18,7 +18,7 @@
         <button onclick="togglePopup()">更多 ▾</button>
         <div id="popup" class="popup">
             <p>角色：会员</p>
-            <button onclick="logout()">退出登录</button>
+            <button>退出登录</button>
         </div>
     </div>
 </div>
@@ -39,30 +39,41 @@
 
     <!-- 内容区域 -->
     <div class="content">
-        <div class="order-container">
-            <h2>课程预约</h2>
+        <div class="package-detail-container">
+            <a href="/purchase_course" class="btn-back">← 返回套餐列表</a>
             
-            <!-- 筛选栏 -->
-            <div class="filter-bar">
-                <label>课程类型：</label>
-                <select id="categoryFilter" onchange="filterCourses()">
-                    <option value="">全部</option>
-                    <option value="瑜伽">瑜伽</option>
-                    <option value="力量训练">力量训练</option>
-                    <option value="有氧运动">有氧运动</option>
-                    <option value="HIIT">HIIT</option>
-                </select>
-            </div>
-
-            <!-- 课程网格 -->
-            <div class="courses-grid" id="coursesGrid">
+            <div id="packageDetailContent">
                 <div class="loading">加载中...</div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- 支付弹框 -->
+<div id="paymentModal" class="payment-modal">
+    <div class="payment-modal-content">
+        <button class="close-modal" onclick="closePaymentModal()">&times;</button>
+        <div class="payment-modal-header">
+            <h2>请支付</h2>
+        </div>
+        <div class="payment-amount">
+            <div class="label">支付金额</div>
+            <div class="amount" id="paymentAmount">¥0.00</div>
+        </div>
+        <div class="qr-code-area" id="qrCodeArea">
+            这是二维码
+        </div>
+        <div class="payment-actions">
+            <button class="btn-confirm-payment" onclick="confirmPayment()">已支付</button>
+            <button class="btn-cancel-payment" onclick="cancelPayment()">取消支付</button>
+        </div>
+    </div>
+</div>
+
 <script src="/js/main.js"></script>
-<script src="/js/order.js"></script>
+<script src="/js/packageDetail.js"></script>
 </body>
 </html>
+
+
+

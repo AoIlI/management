@@ -3,6 +3,9 @@ package org.example.demo.entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 public class Transaction {
     @Getter
     @Setter
@@ -12,13 +15,13 @@ public class Transaction {
     private String memberId;
     @Getter
     @Setter
-    private double amount;
+    private BigDecimal amount;
     @Getter
     @Setter
     private String transactionType;
     @Getter
     @Setter
-    private String date;
+    private LocalDateTime transactionTime;
     @Getter
     @Setter
     private String description;
