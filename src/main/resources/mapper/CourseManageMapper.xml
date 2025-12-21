@@ -6,29 +6,36 @@
 <mapper namespace="org.example.demo.mapper.CourseManageMapper">
 
     <select id="selectAll" resultType="org.example.demo.entity.Fitness_classes">
-        SELECT class_id AS classId, class_name AS className, coach_id AS coachId, 
-               day_of_week AS dayOfWeek, class_time AS classTime, duration_minutes AS durationMinutes, 
-               max_capacity AS maxCapacity, current_enrollment AS currentEnrollment
-        FROM fitness_classes
+        SELECT fc.class_id AS classId, fc.class_name AS className, fc.coach_id AS coachId, 
+               s.name AS coachName, fc.day_of_week AS dayOfWeek, fc.class_time AS classTime, 
+               fc.duration_minutes AS durationMinutes, fc.max_capacity AS maxCapacity, 
+               fc.current_enrollment AS currentEnrollment
+        FROM fitness_classes fc
+        LEFT JOIN staff s ON fc.coach_id = s.staff_id
     </select>
 
     <select id="getCourseById" parameterType="String"
             resultType="org.example.demo.entity.Fitness_classes">
-        SELECT class_id AS classId, class_name AS className, coach_id AS coachId, 
-               day_of_week AS dayOfWeek, class_time AS classTime, duration_minutes AS durationMinutes, 
-               max_capacity AS maxCapacity, current_enrollment AS currentEnrollment
-        FROM fitness_classes
-        WHERE class_id = #{classId}
+        SELECT fc.class_id AS classId, fc.class_name AS className, fc.coach_id AS coachId, 
+               s.name AS coachName, fc.day_of_week AS dayOfWeek, fc.class_time AS classTime, 
+               fc.duration_minutes AS durationMinutes, fc.max_capacity AS maxCapacity, 
+               fc.current_enrollment AS currentEnrollment
+        FROM fitness_classes fc
+        LEFT JOIN staff s ON fc.coach_id = s.staff_id
+        WHERE fc.class_id = #{classId}
     </select>
 
     <select id="searchCourses" resultType="org.example.demo.entity.Fitness_classes" parameterType="String">
-        SELECT class_id AS classId, class_name AS className, coach_id AS coachId, 
-               day_of_week AS dayOfWeek, class_time AS classTime, duration_minutes AS durationMinutes, 
-               max_capacity AS maxCapacity, current_enrollment AS currentEnrollment
-        FROM fitness_classes
-        WHERE (class_id LIKE CONCAT('%', #{keyword}, '%')
-            OR class_name LIKE CONCAT('%', #{keyword}, '%')
-            OR coach_id LIKE CONCAT('%', #{keyword}, '%'))
+        SELECT fc.class_id AS classId, fc.class_name AS className, fc.coach_id AS coachId, 
+               s.name AS coachName, fc.day_of_week AS dayOfWeek, fc.class_time AS classTime, 
+               fc.duration_minutes AS durationMinutes, fc.max_capacity AS maxCapacity, 
+               fc.current_enrollment AS currentEnrollment
+        FROM fitness_classes fc
+        LEFT JOIN staff s ON fc.coach_id = s.staff_id
+        WHERE (fc.class_id LIKE CONCAT('%', #{keyword}, '%')
+            OR fc.class_name LIKE CONCAT('%', #{keyword}, '%')
+            OR fc.coach_id LIKE CONCAT('%', #{keyword}, '%')
+            OR s.name LIKE CONCAT('%', #{keyword}, '%'))
 
     </select>
     <update id="updateCourse" parameterType="org.example.demo.entity.Fitness_classes">

@@ -17,7 +17,7 @@
         <div id="popup" class="popup">
             <p>角色：管理员</p>
             <p>邮箱：test@test.com</p>
-            <button>退出登录</button>
+            <button onclick="logout()">退出登录</button>
         </div>
     </div>
 </div>
@@ -43,7 +43,7 @@
         <!-- 表格工具栏 -->
         <div class="table-toolbar">
             <div class="toolbar-left">
-                <input type="text" id="searchInput" placeholder="搜索姓名 / 手机号">
+                <input type="text" id="searchInput" placeholder="搜索课程名 / 教练名 / 课程ID">
                 <button onclick="searchCourse()">搜索</button>
             </div>
             <div class="toolbar-right">
@@ -56,10 +56,10 @@
         <table class="user-table" id="userTable">
             <thead>
             <tr>
-                <th>课程ID</th>
                 <th>课程名</th>
-                <th>教练ID</th>
-                <th>预约时间</th>
+                <th>教练名</th>
+                <th>上课日期</th>
+                <th>上课时间</th>
                 <th>课程时长</th>
                 <th>课容量</th>
                 <th>当前选课人数</th>
@@ -84,7 +84,7 @@
         <h3>修改课程信息</h3>
         <form id="editForm" onsubmit="submitEditForm(event)">
             <label>课程ID</label>
-            <label for="editClassId"></label><input type="text" id="editClassId" name="class_id">
+            <label for="editClassId"></label><input type="text" id="editClassId" name="class_id" readonly>
 
             <label>课程名</label>
             <label for="editClassName"></label><input type="text" id="editClassName" name="class_name">
@@ -92,17 +92,20 @@
             <label>教练ID</label>
             <label for="editCoachId"></label><input type="text" id="editCoachId" name="coach_id">
 
-            <label>预约时间</label>
-            <label for="editScheduleTime"></label><input type="datetime-local" id="editScheduleTime" name="schedule_time">
+            <label>上课日期（周几，1-7，1表示周一，7表示周日）</label>
+            <label for="editDayOfWeek"></label><input type="number" id="editDayOfWeek" name="day_of_week" min="1" max="7" required>
 
-            <label>课程时长</label>
-            <label for="editDurationMinutes"></label><input type="text" id="editDurationMinutes" name="duration_minutes">
+            <label>上课时间</label>
+            <label for="editClassTime"></label><input type="time" id="editClassTime" name="class_time" required>
+
+            <label>课程时长（分钟）</label>
+            <label for="editDurationMinutes"></label><input type="number" id="editDurationMinutes" name="duration_minutes" required>
 
             <label>课容量</label>
-            <label for="editMaxCapacity"></label><input type="text" id="editMaxCapacity" name="max_capacity">
+            <label for="editMaxCapacity"></label><input type="number" id="editMaxCapacity" name="max_capacity" required>
 
             <label>当前选课人数</label>
-            <label for="editCurrentEnrollment"></label><input type="text" id="editCurrentEnrollment" name="current_enrollment" readonly>
+            <label for="editCurrentEnrollment"></label><input type="number" id="editCurrentEnrollment" name="current_enrollment" readonly>
 
             <button type="submit">保存修改</button>
         </form>
@@ -132,9 +135,13 @@
             <label for="addCoachId"></label>
             <input type="text" id="addCoachId" name="coach_id" required>
 
-            <label>预约时间</label>
-            <label for="addScheduleTime"></label>
-            <input type="datetime-local" id="addScheduleTime" name="schedule_time" required>
+            <label>上课日期（周几，1-7，1表示周一，7表示周日）</label>
+            <label for="addDayOfWeek"></label>
+            <input type="number" id="addDayOfWeek" name="day_of_week" min="1" max="7" required>
+
+            <label>上课时间</label>
+            <label for="addClassTime"></label>
+            <input type="time" id="addClassTime" name="class_time" required>
 
             <label>课程时长（分钟）</label>
             <label for="addDurationMinutes"></label>

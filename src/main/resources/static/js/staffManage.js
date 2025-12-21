@@ -19,7 +19,7 @@ function renderTable(staffs) {
     tbody.innerHTML = '';
 
     if (staffs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 20px;">暂无员工数据</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 40px 20px; color: #909399; font-size: 16px;">📋 暂无员工数据</td></tr>';
         return;
     }
 
@@ -27,20 +27,21 @@ function renderTable(staffs) {
         console.log(staff);
         const tr = document.createElement('tr');
 
+        // 格式化入职日期（因为Jackson配置了SNAKE_CASE，所以使用下划线命名）
+        const hireDateStr = staff.hire_date ? staff.hire_date.split('T')[0] : '-';
+
         tr.innerHTML = `
-            <td>${staff.staffId || ''}</td>
-            <td>${staff.accountId || ''}</td>
             <td>${staff.name || ''}</td>
             <td>${staff.role || ''}</td>
             <td>${staff.phone || ''}</td>
             <td>${staff.email || '-'}</td>
             <td>${staff.specialty || '-'}</td>
-            <td>${staff.hireDate || '-'}</td>
+            <td>${hireDateStr}</td>
             <td>${staff.status || ''}</td>
             <td>${staff.department || '-'}</td>
             <td>
-                <button class="action-btn edit-btn" onclick="openEditModal('${staff.staffId}')">修改</button>
-                <button class="action-btn delete-btn" onclick="deleteStaff('${staff.staffId}')">删除</button>
+                <button class="action-btn edit-btn" onclick="openEditModal('${staff.staff_id}')">修改</button>
+                <button class="action-btn delete-btn" onclick="deleteStaff('${staff.staff_id}')">删除</button>
             </td>
         `;
 
@@ -104,14 +105,20 @@ function openEditModal(staffId) {
     fetch(`/api/staffManage/${staffId}`)
         .then(res => res.json())
         .then(staff => {
-            document.getElementById('editStaffId').value = staff.staffId || '';
-            document.getElementById('editAccountId').value = staff.accountId || '';
+            // 格式化日期用于date input（因为Jackson配置了SNAKE_CASE，所以使用下划线命名）
+            let hireDateValue = staff.hire_date || '';
+            if (hireDateValue && hireDateValue.length > 10) {
+                hireDateValue = hireDateValue.substring(0, 10);
+            }
+
+            document.getElementById('editStaffId').value = staff.staff_id || '';
+            document.getElementById('editAccountId').value = staff.account_id || '';
             document.getElementById('editName').value = staff.name || '';
             document.getElementById('editRole').value = staff.role || '';
             document.getElementById('editPhone').value = staff.phone || '';
             document.getElementById('editEmail').value = staff.email || '';
             document.getElementById('editSpecialty').value = staff.specialty || '';
-            document.getElementById('editHireDate').value = staff.hireDate || '';
+            document.getElementById('editHireDate').value = hireDateValue;
             document.getElementById('editStatus').value = staff.status || '在职';
             document.getElementById('editDepartment').value = staff.department || '';
 
@@ -134,6 +141,11 @@ function closeEditModal() {
 function openAddModal() {
     // 清空表单
     document.getElementById('addForm').reset();
+    
+    // 设置入职日期默认为当前日期
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('addHireDate').value = today;
+    
     const modal = document.getElementById('addModal');
     modal.style.display = 'block';
     modal.classList.remove('modal-animate');

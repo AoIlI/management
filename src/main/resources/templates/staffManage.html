@@ -17,7 +17,7 @@
         <div id="popup" class="popup">
             <p>角色：管理员</p>
             <p>邮箱：admin@fitness.com</p>
-            <button>退出登录</button>
+            <button onclick="logout()">退出登录</button>
         </div>
     </div>
 </div>
@@ -43,11 +43,11 @@
         <!-- 表格工具栏 -->
         <div class="table-toolbar">
             <div class="toolbar-left">
-                <input type="text" id="searchInput" placeholder="搜索员工ID / 姓名 / 手机号 / 职位">
+                <input type="text" id="searchInput" placeholder="搜索姓名 / 手机号">
                 <button onclick="searchStaff()">搜索</button>
-                <button class="add-btn" onclick="openAddModal()">添加员工</button>
             </div>
             <div class="toolbar-right">
+                <button class="add-btn" onclick="openAddModal()">添加员工</button>
                 <button class="export-btn" onclick="exportExcel()">导出 Excel</button>
             </div>
         </div>
@@ -56,8 +56,6 @@
             <table class="user-table" id="staffTable">
                 <thead>
                 <tr>
-                    <th>员工ID</th>
-                    <th>账号ID</th>
                     <th>姓名</th>
                     <th>职位</th>
                     <th>手机号</th>

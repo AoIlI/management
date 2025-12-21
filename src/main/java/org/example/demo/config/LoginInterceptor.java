@@ -17,6 +17,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         // 放行无需登录访问的页面
         if (uri.equals("/")              // 登录页
                 || uri.equals("/login")   // 登录表单提交
+                || uri.equals("/logout")  // 退出登录
                 || uri.equals("/register") // 注册页面
                 || uri.startsWith("/api/register") // 注册 AJAX
                 || uri.equals("/recover") // 找回密码页面

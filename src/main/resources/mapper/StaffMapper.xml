@@ -26,10 +26,8 @@
         SELECT staff_id AS staffId, account_id AS accountId, name, role, phone, email, 
                specialty, hire_date AS hireDate, status, department
         FROM staff
-        WHERE (staff_id LIKE CONCAT('%', #{keyword}, '%')
-            OR name LIKE CONCAT('%', #{keyword}, '%')
-            OR phone LIKE CONCAT('%', #{keyword}, '%')
-            OR role LIKE CONCAT('%', #{keyword}, '%'))
+        WHERE (name LIKE CONCAT('%', #{keyword}, '%')
+            OR phone LIKE CONCAT('%', #{keyword}, '%'))
     </select>
 
     <insert id="insert" parameterType="org.example.demo.entity.Staff">

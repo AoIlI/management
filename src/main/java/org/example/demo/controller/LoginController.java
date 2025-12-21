@@ -4,6 +4,7 @@ import org.example.demo.entity.Account;
 import org.example.demo.service.LoginService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,6 +37,15 @@ public class LoginController {
         System.out.println("【LOGIN】loginUser=" + account);
         // ★ 必须重定向，建立真正的登录态
         return "redirect:/index";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        if (session != null) {
+            session.invalidate();
+            System.out.println("【LOGOUT】用户已退出登录");
+        }
+        return "redirect:/";
     }
 
 }

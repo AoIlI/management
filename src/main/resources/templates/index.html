@@ -17,7 +17,7 @@
         <div id="popup" class="popup">
             <p>角色：管理员</p>
             <p>邮箱：test@test.com</p>
-            <button>退出登录</button>
+            <button onclick="logout()">退出登录</button>
         </div>
     </div>
 </div>
@@ -43,5 +43,15 @@
 </div>
 
 <script src="/js/main.js"></script>
+<script>
+    // 确保 logout 函数可用（备用方案）
+    if (typeof logout === 'undefined') {
+        window.logout = function() {
+            if (confirm('确定要退出登录吗？')) {
+                window.location.href = '/logout';
+            }
+        };
+    }
+</script>
 </body>
 </html>

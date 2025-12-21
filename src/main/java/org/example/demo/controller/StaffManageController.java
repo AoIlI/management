@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -36,7 +38,8 @@ public class StaffManageController {
                 : staffService.searchStaffs(keyword);
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=员工表.xlsx");
+        String encodedFileName = URLEncoder.encode("员工表.xlsx", StandardCharsets.UTF_8).replace("+", "%20");
+        response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + encodedFileName);
 
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet("Staffs");

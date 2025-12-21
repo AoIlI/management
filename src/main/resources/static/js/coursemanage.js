@@ -17,18 +17,31 @@ function renderTable(courses) {
     const tbody = document.querySelector('#userTable tbody');
     tbody.innerHTML = '';
 
+    const weekDays = ['', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+
     courses.forEach(course => {
         console.log(course);
         const tr = document.createElement('tr');
 
+        // 格式化上课日期 - 使用下划线命名（因为Jackson配置了SNAKE_CASE）
+        const dayOfWeekStr = course.day_of_week && course.day_of_week >= 1 && course.day_of_week <= 7 
+            ? weekDays[course.day_of_week] 
+            : (course.day_of_week || '');
+
+        // 格式化上课时间 - LocalTime格式通常是 "HH:mm:ss"，需要转换为 "HH:mm" 用于显示
+        let classTimeStr = course.class_time || '';
+        if (classTimeStr && classTimeStr.length > 5) {
+            classTimeStr = classTimeStr.substring(0, 5); // 截取前5个字符 "HH:mm"
+        }
+
         tr.innerHTML = `
-            <td>${course.class_id}</td>
-            <td>${course.class_name}</td>
-            <td>${course.coach_id}</td>
-            <td>${course.schedule_time}</td>
-            <td>${course.duration_minutes}</td>
-            <td>${course.max_capacity}</td>
-            <td>${course.current_enrollment}</td>
+            <td>${course.class_name || ''}</td>
+            <td>${course.coach_name || course.coach_id || ''}</td>
+            <td>${dayOfWeekStr}</td>
+            <td>${classTimeStr}</td>
+            <td>${course.duration_minutes || ''}</td>
+            <td>${course.max_capacity || ''}</td>
+            <td>${course.current_enrollment || ''}</td>
             <td>
                 <button class="action-btn edit-btn" onclick="openEditModal('${course.class_id}')">修改</button>
                 <button class="action-btn delete-btn" onclick="deleteCourse('${course.class_id}')">删除</button>
@@ -87,10 +100,16 @@ function openEditModal(classId) {
     fetch(`/api/courseManage/${classId}`)
         .then(res => res.json())
         .then(course => {
-            document.getElementById('editClassId').value = course.class_id|| '';
+            document.getElementById('editClassId').value = course.class_id || '';
             document.getElementById('editClassName').value = course.class_name || '';
             document.getElementById('editCoachId').value = course.coach_id || '';
-            document.getElementById('editScheduleTime').value = course.schedule_time|| '';
+            document.getElementById('editDayOfWeek').value = course.day_of_week || '';
+            // 格式化时间用于time input（需要HH:mm格式）
+            let classTimeValue = course.class_time || '';
+            if (classTimeValue && classTimeValue.length > 5) {
+                classTimeValue = classTimeValue.substring(0, 5);
+            }
+            document.getElementById('editClassTime').value = classTimeValue;
             document.getElementById('editDurationMinutes').value = course.duration_minutes || '';
             document.getElementById('editMaxCapacity').value = course.max_capacity || '';
             document.getElementById('editCurrentEnrollment').value = course.current_enrollment || '';
@@ -122,13 +141,14 @@ function submitEditForm(event) {
     // }
 
     const formData = {
-        class_id: document.getElementById('editClassId').value,
-        class_name: document.getElementById('editClassName').value,
-        coach_id: document.getElementById('editCoachId').value,
-        schedule_time: document.getElementById('editScheduleTime').value,
-        duration_minutes: Number(document.getElementById('editDurationMinutes').value),
-        max_capacity: Number(document.getElementById('editMaxCapacity').value),
-        current_enrollment: Number(document.getElementById('editCurrentEnrollment').value)
+        classId: document.getElementById('editClassId').value,
+        className: document.getElementById('editClassName').value,
+        coachId: document.getElementById('editCoachId').value,
+        dayOfWeek: Number(document.getElementById('editDayOfWeek').value),
+        classTime: document.getElementById('editClassTime').value,
+        durationMinutes: Number(document.getElementById('editDurationMinutes').value),
+        maxCapacity: Number(document.getElementById('editMaxCapacity').value),
+        currentEnrollment: Number(document.getElementById('editCurrentEnrollment').value)
     };
 
     fetch('/api/courseManage/update', {
@@ -171,13 +191,14 @@ function submitAddForm(event) {
 
 
     const formData = {
-        class_id: document.getElementById('addClassId').value,
-        class_name: document.getElementById('addClassName').value,
-        coach_id: document.getElementById('addCoachId').value,
-        schedule_time: document.getElementById('addScheduleTime').value,
-        duration_minutes: Number(document.getElementById('addDurationMinutes').value),
-        max_capacity: Number(document.getElementById('addMaxCapacity').value),
-        current_enrollment: 0
+        classId: document.getElementById('addClassId').value,
+        className: document.getElementById('addClassName').value,
+        coachId: document.getElementById('addCoachId').value,
+        dayOfWeek: Number(document.getElementById('addDayOfWeek').value),
+        classTime: document.getElementById('addClassTime').value,
+        durationMinutes: Number(document.getElementById('addDurationMinutes').value),
+        maxCapacity: Number(document.getElementById('addMaxCapacity').value),
+        currentEnrollment: 0
     };
 
     fetch('/api/courseManage/add', {

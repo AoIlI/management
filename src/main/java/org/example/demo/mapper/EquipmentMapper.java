@@ -8,4 +8,12 @@ import java.util.List;
 @Mapper
 public interface EquipmentMapper {
     List<Equipment> selectAll();
+    
+    Equipment getById(String equipmentId);
+    
+    void updateEquipment(Equipment equipment);
+    
+    void deleteById(String equipmentId);
+    
+    void addEquipment(Equipment equipment);
 }

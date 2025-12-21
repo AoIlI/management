@@ -17,6 +17,9 @@ public class Fitness_classes {
     private String coachId;
     @Getter
     @Setter
+    private String coachName;  // 教练名（从staff表获取，不创建新实体类）
+    @Getter
+    @Setter
     private Integer dayOfWeek;  // 周几(1-7，1表示周一，7表示周日)
     @Getter
     @Setter

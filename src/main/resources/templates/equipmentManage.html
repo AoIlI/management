@@ -17,7 +17,7 @@
         <div id="popup" class="popup">
             <p>角色：管理员</p>
             <p>邮箱：test@test.com</p>
-            <button>退出登录</button>
+            <button onclick="logout()">退出登录</button>
         </div>
     </div>
 </div>
@@ -38,10 +38,154 @@
 
     <!-- 内容区域 -->
     <div class="content">
-        <h2>欢迎进入管理系统</h2>
+        <h2>设备管理</h2>
+
+        <!-- 表格工具栏 -->
+        <div class="table-toolbar">
+            <div class="toolbar-left">
+                <input type="text" id="searchInput" placeholder="搜索设备名称">
+                <button onclick="searchEquipment()">搜索</button>
+            </div>
+            <div class="toolbar-right">
+                <button class="add-btn" onclick="openAddModal()">添加设备</button>
+                <button class="export-btn" onclick="exportExcel()">导出 Excel</button>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="user-table" id="equipmentTable">
+                <thead>
+                <tr>
+                    <th>设备名称</th>
+                    <th>健康状态</th>
+                    <th>价格</th>
+                    <th>购入日期</th>
+                    <th>使用年限</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- JS 动态插入 -->
+                </tbody>
+            </table>
+        </div>
+        <script src="/js/equipmentManage.js"></script>
     </div>
 </div>
 
 <script src="/js/main.js"></script>
+
+<!-- 设备详情弹窗 -->
+<div id="detailModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeDetailModal()">&times;</span>
+        <h3>设备详细信息</h3>
+        <form id="detailForm">
+            <div id="equipmentDetail">
+                <!-- 详细信息将在这里显示 -->
+            </div>
+            <button type="button" onclick="closeDetailModal()">关闭</button>
+        </form>
+    </div>
+</div>
+
+<!-- 修改设备弹窗 -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <h3>修改设备信息</h3>
+        <div id="editErrorMsg" class="form-error"></div>
+        <form id="editForm" onsubmit="submitEditForm(event)">
+            <label>设备ID（不可修改）</label>
+            <input type="text" id="editEquipmentId" name="equipment_id" readonly>
+
+            <label>设备名称</label>
+            <input type="text" id="editName" name="name" required>
+
+            <label>器材类型</label>
+            <select id="editCategory" name="category" required>
+                <option value="1">有氧</option>
+                <option value="2">力量</option>
+                <option value="3">自由重量</option>
+                <option value="4">拉伸</option>
+                <option value="6">综合</option>
+            </select>
+
+            <label>所在区域</label>
+            <input type="text" id="editArea" name="area">
+
+            <label>价格</label>
+            <input type="number" id="editPrice" name="price" step="0.01" required>
+
+            <label>使用年限（年）</label>
+            <input type="number" id="editServiceLife" name="service_life" required>
+
+            <label>使用状态</label>
+            <select id="editStatus" name="status" required>
+                <option value="使用中">使用中</option>
+                <option value="维修中">维修中</option>
+                <option value="停用">停用</option>
+            </select>
+
+            <label>健康状态</label>
+            <select id="editHealthStatus" name="health_status" required>
+                <option value="正常">正常</option>
+                <option value="磨损">磨损</option>
+                <option value="严重磨损">严重磨损</option>
+            </select>
+
+            <label>购入日期</label>
+            <input type="date" id="editPurchaseDate" name="purchase_date" required>
+
+            <label>最近维护日期</label>
+            <input type="date" id="editLastMaintenanceDate" name="last_maintenance_date">
+
+            <label>维护次数</label>
+            <input type="number" id="editMaintenanceCount" name="maintenance_count" min="0">
+
+            <label>日均使用次数</label>
+            <input type="number" id="editUsageCount" name="usage_count" min="0">
+
+            <button type="submit">保存修改</button>
+        </form>
+    </div>
+</div>
+
+<!-- 添加设备弹窗 -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddModal()">&times;</span>
+        <h3>添加设备</h3>
+        <div id="addErrorMsg" class="form-error"></div>
+        <form id="addForm" onsubmit="submitAddForm(event)">
+            <label>设备ID</label>
+            <input type="text" id="addEquipmentId" name="equipment_id" required>
+
+            <label>设备名称</label>
+            <input type="text" id="addName" name="name" required>
+
+            <label>器材类型</label>
+            <select id="addCategory" name="category" required>
+                <option value="1">有氧</option>
+                <option value="2">力量</option>
+                <option value="3">自由重量</option>
+                <option value="4">拉伸</option>
+                <option value="6">综合</option>
+            </select>
+
+            <label>所在区域</label>
+            <input type="text" id="addArea" name="area">
+
+            <label>价格</label>
+            <input type="number" id="addPrice" name="price" step="0.01" required>
+
+            <label>使用年限（年）</label>
+            <input type="number" id="addServiceLife" name="service_life" required>
+
+            <button type="submit">确认添加</button>
+        </form>
+    </div>
+</div>
+
 </body>
 </html>

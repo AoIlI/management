@@ -13,6 +13,44 @@
         FROM equipment
     </select>
 
+    <select id="getById" parameterType="String" resultType="org.example.demo.entity.Equipment">
+        SELECT equipment_id AS equipmentId, name, category, purchase_date AS purchaseDate, 
+               status, health_status AS healthStatus, last_maintenance_date AS lastMaintenanceDate, 
+               maintenance_count AS maintenanceCount, service_life AS serviceLife, 
+               usage_count AS usageCount, price, area
+        FROM equipment
+        WHERE equipment_id = #{equipmentId}
+    </select>
 
+    <update id="updateEquipment" parameterType="org.example.demo.entity.Equipment">
+        UPDATE equipment
+        SET
+            name = #{name},
+            category = #{category},
+            area = #{area},
+            status = #{status},
+            health_status = #{healthStatus},
+            price = #{price},
+            purchase_date = #{purchaseDate},
+            service_life = #{serviceLife},
+            last_maintenance_date = #{lastMaintenanceDate},
+            maintenance_count = #{maintenanceCount},
+            usage_count = #{usageCount}
+        WHERE equipment_id = #{equipmentId}
+    </update>
+
+    <delete id="deleteById" parameterType="String">
+        DELETE FROM equipment
+        WHERE equipment_id = #{equipmentId}
+    </delete>
+
+    <insert id="addEquipment" parameterType="org.example.demo.entity.Equipment">
+        INSERT INTO equipment
+        (equipment_id, name, category, area, status, health_status, price, purchase_date, 
+         service_life, last_maintenance_date, maintenance_count, usage_count)
+        VALUES
+        (#{equipmentId}, #{name}, #{category}, #{area}, #{status}, #{healthStatus}, #{price}, 
+         #{purchaseDate}, #{serviceLife}, #{lastMaintenanceDate}, #{maintenanceCount}, #{usageCount})
+    </insert>
 
 </mapper>
