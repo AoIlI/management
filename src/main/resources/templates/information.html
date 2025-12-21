@@ -26,14 +26,15 @@
 <div class="container">
     <!-- 左侧导航 -->
     <div class="sidebar">
+        <a href="/index">首页</a>
         <a href="/user">用户管理</a>
         <a href="/purchase_course">购买课程</a>
         <a href="/order">课程预约</a>
-        <a href="/info">个人信息</a>
         <a href="/equipment">设备状态</a>
         <a href="/equipmentManage">设备管理</a>
         <a href="/staffManage">员工管理</a>
         <a href="/courseManage">课程管理</a>
+        <a href="/info">个人信息</a>
     </div>
 
     <div class="content">
@@ -53,21 +54,36 @@
                                     <span class="info-label">用户名：</span>
                                     <span class="info-value" id="usernameText">-</span>
                                 </div>
-                                <div class="info-item">
+                                <!-- Member角色显示 -->
+                                <div class="info-item" id="memberIdItem">
                                     <span class="info-label">会员编号：</span>
                                     <span class="info-value" id="memberId">-</span>
                                 </div>
-                                <div class="info-item">
+                                <div class="info-item" id="membershipTypeItem">
                                     <span class="info-label">会员类型：</span>
                                     <span class="info-value" id="membershipType">-</span>
                                 </div>
+                                <div class="info-item" id="availableClassesItem">
+                                    <span class="info-label">可用课程次数：</span>
+                                    <span class="info-value" id="availableClasses" style="color: #409eff; font-weight: bold;">-</span>
+                                </div>
+                                <!-- Admin/Coach角色显示 -->
+                                <div class="info-item" id="staffIdItem" style="display:none;">
+                                    <span class="info-label">员工编号：</span>
+                                    <span class="info-value" id="staffId">-</span>
+                                </div>
+                                <div class="info-item" id="staffRoleItem" style="display:none;">
+                                    <span class="info-label">职位：</span>
+                                    <span class="info-value" id="staffRole">-</span>
+                                </div>
+                                <div class="info-item" id="departmentItem" style="display:none;">
+                                    <span class="info-label">部门：</span>
+                                    <span class="info-value" id="department">-</span>
+                                </div>
+                                <!-- 通用显示 -->
                                 <div class="info-item">
                                     <span class="info-label">账户状态：</span>
                                     <span class="info-value" id="status">-</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">可用课程次数：</span>
-                                    <span class="info-value" id="availableClasses" style="color: #409eff; font-weight: bold;">-</span>
                                 </div>
                             </div>
                         </div>
@@ -87,9 +103,24 @@
                                     <div id="phoneError" class="error-text"></div>
                                 </div>
 
-                                <div class="form-item">
+                                <!-- Member角色显示 -->
+                                <div class="form-item" id="dateRangeItem">
                                     <label class="form-label">会员有效期</label>
                                     <input type="text" id="dateRange" class="form-input" disabled>
+                                </div>
+                                
+                                <!-- Admin/Coach角色显示 -->
+                                <div class="form-item" id="emailItem" style="display:none;">
+                                    <label class="form-label">邮箱</label>
+                                    <input type="text" id="emailInput" class="form-input" disabled>
+                                </div>
+                                <div class="form-item" id="hireDateItem" style="display:none;">
+                                    <label class="form-label">入职日期</label>
+                                    <input type="text" id="hireDateInput" class="form-input" disabled>
+                                </div>
+                                <div class="form-item" id="specialtyItem" style="display:none;">
+                                    <label class="form-label">专长</label>
+                                    <input type="text" id="specialtyInput" class="form-input" disabled>
                                 </div>
 
                                 <div class="form-item">
@@ -108,8 +139,8 @@
                 </div>
             </div>
 
-            <!-- 已预约课程卡片 -->
-            <div class="info-card">
+            <!-- 已预约课程卡片（仅member可见） -->
+            <div class="info-card" id="bookingCard" style="display:none;">
                 <div class="card-header">
                     <h3>已预约课程</h3>
                 </div>

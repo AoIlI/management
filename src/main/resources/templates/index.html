@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>管理系统</title>
     <link rel="stylesheet" href="/css/user.css">
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
 
@@ -26,23 +27,228 @@
 <div class="container">
     <!-- 侧边栏 -->
     <div class="sidebar">
+        <a href="/index">首页</a>
         <a href="/user">用户管理</a>
         <a href="/purchase_course">购买课程</a>
         <a href="/order">课程预约</a>
-        <a href="/info">个人信息</a>
         <a href="/equipment">设备状态</a>
         <a href="/equipmentManage">设备管理</a>
         <a href="/staffManage">员工管理</a>
         <a href="/courseManage">课程管理</a>
+        <a href="/info">个人信息</a>
     </div>
 
     <!-- 内容区域 -->
     <div class="content">
-        <h2>欢迎进入管理系统</h2>
+        <h2>首页</h2>
+        
+        <!-- 管理员首页 -->
+        <div id="adminDashboard" class="dashboard-container" style="display: none;">
+            <!-- 统计卡片区域 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <span>👥</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalUsers">0</div>
+                        <div class="stat-label">总用户数</div>
+                    </div>
+                    <div class="stat-action">
+                        <a href="/user">查看详情 →</a>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <span>📚</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalCourses">0</div>
+                        <div class="stat-label">课程总数</div>
+                    </div>
+                    <div class="stat-action">
+                        <a href="/courseManage">查看详情 →</a>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <span>🏋️</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalEquipment">0</div>
+                        <div class="stat-label">设备总数</div>
+                    </div>
+                    <div class="stat-action">
+                        <a href="/equipmentManage">查看详情 →</a>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <span>👔</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalStaff">0</div>
+                        <div class="stat-label">员工总数</div>
+                    </div>
+                    <div class="stat-action">
+                        <a href="/staffManage">查看详情 →</a>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <span>📅</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalBookings">0</div>
+                        <div class="stat-label">总预约数</div>
+                    </div>
+                    <div class="stat-action">
+                        <a href="/order">查看详情 →</a>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                        <span>⭐</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="activeMembers">0</div>
+                        <div class="stat-label">活跃会员</div>
+                    </div>
+                    <div class="stat-action">
+                        <a href="/user">查看详情 →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 快速操作区域 -->
+            <div class="quick-actions">
+                <h3>快速操作</h3>
+                <div class="actions-grid">
+                    <a href="/user" class="action-btn">
+                        <span class="action-icon">👥</span>
+                        <span class="action-text">用户管理</span>
+                    </a>
+                    <a href="/courseManage" class="action-btn">
+                        <span class="action-icon">📚</span>
+                        <span class="action-text">课程管理</span>
+                    </a>
+                    <a href="/equipmentManage" class="action-btn">
+                        <span class="action-icon">🏋️</span>
+                        <span class="action-text">设备管理</span>
+                    </a>
+                    <a href="/staffManage" class="action-btn">
+                        <span class="action-icon">👔</span>
+                        <span class="action-text">员工管理</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 普通用户首页 -->
+        <div id="userDashboard" class="dashboard-container" style="display: none;">
+            <!-- 用户信息卡片 -->
+            <div class="user-info-section">
+                <div class="info-card">
+                    <h3>会员卡信息</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">会员类型：</span>
+                            <span class="info-value" id="membershipType">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">生效时间：</span>
+                            <span class="info-value" id="membershipStart">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">到期时间：</span>
+                            <span class="info-value" id="membershipEnd">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">状态：</span>
+                            <span class="info-value" id="membershipStatus">-</span>
+                        </div>
+                    </div>
+                    <div class="card-action">
+                        <a href="/info" class="action-link">查看详细信息 →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 统计卡片 -->
+            <div class="user-stats-grid">
+                <div class="user-stat-card">
+                    <div class="user-stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <span>📅</span>
+                    </div>
+                    <div class="user-stat-content">
+                        <div class="user-stat-value" id="myBookings">0</div>
+                        <div class="user-stat-label">我的预约</div>
+                    </div>
+                    <div class="user-stat-action">
+                        <a href="/order">查看 →</a>
+                    </div>
+                </div>
+                
+                <div class="user-stat-card">
+                    <div class="user-stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <span>🏋️</span>
+                    </div>
+                    <div class="user-stat-content">
+                        <div class="user-stat-value" id="availableEquipment">0</div>
+                        <div class="user-stat-label">可用设备</div>
+                    </div>
+                    <div class="user-stat-action">
+                        <a href="/equipment">查看 →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 最近预约 -->
+            <div class="recent-section">
+                <div class="recent-card">
+                    <h3>最近预约</h3>
+                    <ul id="recentBookingsList" class="bookings-list">
+                        <li class="no-data">加载中...</li>
+                    </ul>
+                    <div class="card-action">
+                        <a href="/order" class="action-link">查看全部预约 →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 快速操作 -->
+            <div class="user-quick-actions">
+                <h3>快速操作</h3>
+                <div class="user-actions-grid">
+                    <a href="/purchase_course" class="user-action-btn">
+                        <span class="user-action-icon">💳</span>
+                        <span class="user-action-text">购买课程</span>
+                    </a>
+                    <a href="/order" class="user-action-btn">
+                        <span class="user-action-icon">📅</span>
+                        <span class="user-action-text">课程预约</span>
+                    </a>
+                    <a href="/equipment" class="user-action-btn">
+                        <span class="user-action-icon">🏋️</span>
+                        <span class="user-action-text">设备状态</span>
+                    </a>
+                    <a href="/info" class="user-action-btn">
+                        <span class="user-action-icon">👤</span>
+                        <span class="user-action-text">个人信息</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script src="/js/main.js"></script>
+<script src="/js/index.js"></script>
 <script>
     // 确保 logout 函数可用（备用方案）
     if (typeof logout === 'undefined') {

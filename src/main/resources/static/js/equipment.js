@@ -61,20 +61,71 @@ function updateCategoryPie(data) {
     categoryPieChart.setOption({
         title: {
             text: "器材分类占比",
-            left: "center"
+            left: "center",
+            textStyle: {
+                fontSize: 16,
+                fontWeight: 'bold',
+                color: '#2c3e50'
+            }
         },
         tooltip: {
             trigger: "item",
-            formatter: "{b}：{c} 台 ({d}%)"
+            formatter: "{b}：{c} 台 ({d}%)",
+            backgroundColor: 'rgba(50, 50, 50, 0.9)',
+            borderColor: '#667eea',
+            borderWidth: 1,
+            textStyle: {
+                color: '#fff'
+            }
         },
         legend: {
-            bottom: 0,
-            left: "center"
+            bottom: 10,
+            left: "center",
+            textStyle: {
+                fontSize: 12,
+                color: '#555'
+            }
         },
+        color: [
+            '#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe'
+        ],
         series: [
             {
                 type: "pie",
-                radius: "60%",
+                radius: ['40%', '70%'],
+                center: ['50%', '50%'],
+                avoidLabelOverlap: true,
+                itemStyle: {
+                    borderRadius: 8,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: true,
+                    formatter: '{b}\n{d}%',
+                    fontSize: 12,
+                    fontWeight: 'bold'
+                },
+                labelLine: {
+                    show: true,
+                    length: 15,
+                    length2: 10
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },
+                    label: {
+                        fontSize: 14
+                    }
+                },
+                animationType: 'scale',
+                animationEasing: 'elasticOut',
+                animationDelay: function (idx) {
+                    return Math.random() * 200;
+                },
                 data: pieData
             }
         ]
@@ -102,26 +153,110 @@ function updateMaintenanceBar(data) {
     maintenanceBarChart.setOption({
         title: {
             text: "维修次数 Top10 设备",
-            left: "center"
+            left: "center",
+            textStyle: {
+                fontSize: 16,
+                fontWeight: 'bold',
+                color: '#2c3e50'
+            }
         },
         tooltip: {
-            trigger: "axis"
+            trigger: "axis",
+            backgroundColor: 'rgba(50, 50, 50, 0.9)',
+            borderColor: '#fa709a',
+            borderWidth: 1,
+            textStyle: {
+                color: '#fff'
+            },
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: '10%',
+            right: '10%',
+            bottom: '20%',
+            top: '15%',
+            containLabel: true
         },
         xAxis: {
             type: "category",
             data: names,
             axisLabel: {
-                rotate: 30
+                rotate: 30,
+                fontSize: 11,
+                color: '#666',
+                interval: 0
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#e0e0e0'
+                }
+            },
+            axisTick: {
+                alignWithLabel: true
             }
         },
         yAxis: {
             type: "value",
-            name: "维修次数"
+            name: "维修次数",
+            nameTextStyle: {
+                color: '#666',
+                fontSize: 12
+            },
+            axisLabel: {
+                color: '#666',
+                fontSize: 11
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#e0e0e0'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    color: '#f0f0f0',
+                    type: 'dashed'
+                }
+            }
         },
         series: [
             {
                 type: "bar",
-                data: values
+                data: values.map((val, idx) => ({
+                    value: val,
+                    itemStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [
+                                { offset: 0, color: '#fa709a' },
+                                { offset: 1, color: '#fee140' }
+                            ]
+                        },
+                        borderRadius: [4, 4, 0, 0]
+                    }
+                })),
+                barWidth: '60%',
+                label: {
+                    show: true,
+                    position: 'top',
+                    color: '#666',
+                    fontSize: 11
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(250, 112, 154, 0.5)'
+                    }
+                },
+                animationDelay: function (idx) {
+                    return idx * 50;
+                }
             }
         ]
     });
@@ -152,24 +287,129 @@ function updateMaintenanceLine(data) {
     maintenanceLineChart.setOption({
         title: {
             text: "设备维修时间趋势",
-            left: "center"
+            left: "center",
+            textStyle: {
+                fontSize: 16,
+                fontWeight: 'bold',
+                color: '#2c3e50'
+            }
         },
         tooltip: {
-            trigger: "axis"
+            trigger: "axis",
+            backgroundColor: 'rgba(50, 50, 50, 0.9)',
+            borderColor: '#667eea',
+            borderWidth: 1,
+            textStyle: {
+                color: '#fff'
+            },
+            axisPointer: {
+                type: 'cross',
+                crossStyle: {
+                    color: '#667eea'
+                }
+            }
+        },
+        grid: {
+            left: '10%',
+            right: '10%',
+            bottom: '15%',
+            top: '15%',
+            containLabel: true
         },
         xAxis: {
             type: "category",
-            data: months
+            data: months,
+            axisLabel: {
+                color: '#666',
+                fontSize: 11
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#e0e0e0'
+                }
+            },
+            axisTick: {
+                alignWithLabel: true
+            }
         },
         yAxis: {
             type: "value",
-            name: "维修次数"
+            name: "维修次数",
+            nameTextStyle: {
+                color: '#666',
+                fontSize: 12
+            },
+            axisLabel: {
+                color: '#666',
+                fontSize: 11
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#e0e0e0'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    color: '#f0f0f0',
+                    type: 'dashed'
+                }
+            }
         },
         series: [
             {
                 type: "line",
                 smooth: true,
-                data: values
+                data: values,
+                lineStyle: {
+                    width: 3,
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 1,
+                        y2: 0,
+                        colorStops: [
+                            { offset: 0, color: '#667eea' },
+                            { offset: 1, color: '#764ba2' }
+                        ]
+                    }
+                },
+                itemStyle: {
+                    color: '#667eea',
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                },
+                areaStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [
+                            { offset: 0, color: 'rgba(102, 126, 234, 0.3)' },
+                            { offset: 1, color: 'rgba(118, 75, 162, 0.1)' }
+                        ]
+                    }
+                },
+                symbol: 'circle',
+                symbolSize: 8,
+                label: {
+                    show: true,
+                    position: 'top',
+                    color: '#666',
+                    fontSize: 11
+                },
+                emphasis: {
+                    focus: 'series',
+                    itemStyle: {
+                        borderWidth: 3,
+                        shadowBlur: 10,
+                        shadowColor: 'rgba(102, 126, 234, 0.5)'
+                    }
+                },
+                animationDuration: 1000,
+                animationEasing: 'cubicOut'
             }
         ]
     });
@@ -201,24 +441,94 @@ function updateHealthStatusPie(data) {
         );
     }
 
+    // 健康状态颜色映射：正常-绿色，磨损-橙色，严重磨损-红色
+    const healthColors = {
+        "正常": ['#84fab0', '#8fd3f4'],
+        "磨损": ['#ffecd2', '#fcb69f'],
+        "严重磨损": ['#ff9a9e', '#fecfef']
+    };
+    
+    const healthPieData = pieData.map(item => ({
+        ...item,
+        itemStyle: {
+            color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                    { offset: 0, color: healthColors[item.name]?.[0] || '#667eea' },
+                    { offset: 1, color: healthColors[item.name]?.[1] || '#764ba2' }
+                ]
+            },
+            borderRadius: 8,
+            borderColor: '#fff',
+            borderWidth: 2
+        }
+    }));
+
     healthStatusPieChart.setOption({
         title: {
             text: "设备健康状态分布",
-            left: "center"
+            left: "center",
+            textStyle: {
+                fontSize: 16,
+                fontWeight: 'bold',
+                color: '#2c3e50'
+            }
         },
         tooltip: {
             trigger: "item",
-            formatter: "{b}<br/>数量：{c} ({d}%)"
+            formatter: "{b}<br/>数量：{c} ({d}%)",
+            backgroundColor: 'rgba(50, 50, 50, 0.9)',
+            borderColor: '#84fab0',
+            borderWidth: 1,
+            textStyle: {
+                color: '#fff'
+            }
         },
         legend: {
-            bottom: 0,
-            left: "center"
+            bottom: 10,
+            left: "center",
+            textStyle: {
+                fontSize: 12,
+                color: '#555'
+            }
         },
         series: [
             {
                 type: "pie",
-                radius: "60%",
-                data: pieData
+                radius: ['40%', '70%'],
+                center: ['50%', '50%'],
+                avoidLabelOverlap: true,
+                label: {
+                    show: true,
+                    formatter: '{b}\n{d}%',
+                    fontSize: 12,
+                    fontWeight: 'bold'
+                },
+                labelLine: {
+                    show: true,
+                    length: 15,
+                    length2: 10
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },
+                    label: {
+                        fontSize: 14
+                    }
+                },
+                animationType: 'scale',
+                animationEasing: 'elasticOut',
+                animationDelay: function (idx) {
+                    return Math.random() * 200;
+                },
+                data: healthPieData
             }
         ]
     });
@@ -250,24 +560,94 @@ function updateStatusPie(data) {
         );
     }
 
+    // 使用状态颜色映射：空闲中-蓝色，使用中-绿色，维修中-橙色
+    const statusColors = {
+        "空闲中": ['#667eea', '#764ba2'],
+        "使用中": ['#84fab0', '#8fd3f4'],
+        "维修中": ['#ffecd2', '#fcb69f']
+    };
+    
+    const statusPieData = pieData.map(item => ({
+        ...item,
+        itemStyle: {
+            color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                    { offset: 0, color: statusColors[item.name]?.[0] || '#667eea' },
+                    { offset: 1, color: statusColors[item.name]?.[1] || '#764ba2' }
+                ]
+            },
+            borderRadius: 8,
+            borderColor: '#fff',
+            borderWidth: 2
+        }
+    }));
+
     statusPieChart.setOption({
         title: {
             text: "设备使用状态分布",
-            left: "center"
+            left: "center",
+            textStyle: {
+                fontSize: 16,
+                fontWeight: 'bold',
+                color: '#2c3e50'
+            }
         },
         tooltip: {
             trigger: "item",
-            formatter: "{b}<br/>数量：{c} ({d}%)"
+            formatter: "{b}<br/>数量：{c} ({d}%)",
+            backgroundColor: 'rgba(50, 50, 50, 0.9)',
+            borderColor: '#667eea',
+            borderWidth: 1,
+            textStyle: {
+                color: '#fff'
+            }
         },
         legend: {
-            bottom: 0,
-            left: "center"
+            bottom: 10,
+            left: "center",
+            textStyle: {
+                fontSize: 12,
+                color: '#555'
+            }
         },
         series: [
             {
                 type: "pie",
-                radius: "60%",
-                data: pieData
+                radius: ['40%', '70%'],
+                center: ['50%', '50%'],
+                avoidLabelOverlap: true,
+                label: {
+                    show: true,
+                    formatter: '{b}\n{d}%',
+                    fontSize: 12,
+                    fontWeight: 'bold'
+                },
+                labelLine: {
+                    show: true,
+                    length: 15,
+                    length2: 10
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },
+                    label: {
+                        fontSize: 14
+                    }
+                },
+                animationType: 'scale',
+                animationEasing: 'elasticOut',
+                animationDelay: function (idx) {
+                    return Math.random() * 200;
+                },
+                data: statusPieData
             }
         ]
     });
@@ -291,12 +671,113 @@ function updateUsageCountBar(data) {
     }
 
     usageCountChart.setOption({
-        title: { text: "设备使用次数 Top10", left: "center" },
-        tooltip: { trigger: "axis" },
-        xAxis: { type: "category", data: names, axisLabel:{ rotate:30 } },
-        yAxis: { type: "value", name: "使用次数" },
+        title: {
+            text: "设备使用次数 Top10",
+            left: "center",
+            textStyle: {
+                fontSize: 16,
+                fontWeight: 'bold',
+                color: '#2c3e50'
+            }
+        },
+        tooltip: {
+            trigger: "axis",
+            backgroundColor: 'rgba(50, 50, 50, 0.9)',
+            borderColor: '#4facfe',
+            borderWidth: 1,
+            textStyle: {
+                color: '#fff'
+            },
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: '10%',
+            right: '10%',
+            bottom: '20%',
+            top: '15%',
+            containLabel: true
+        },
+        xAxis: {
+            type: "category",
+            data: names,
+            axisLabel: {
+                rotate: 30,
+                fontSize: 11,
+                color: '#666',
+                interval: 0
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#e0e0e0'
+                }
+            },
+            axisTick: {
+                alignWithLabel: true
+            }
+        },
+        yAxis: {
+            type: "value",
+            name: "使用次数",
+            nameTextStyle: {
+                color: '#666',
+                fontSize: 12
+            },
+            axisLabel: {
+                color: '#666',
+                fontSize: 11
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#e0e0e0'
+                }
+            },
+            splitLine: {
+                lineStyle: {
+                    color: '#f0f0f0',
+                    type: 'dashed'
+                }
+            }
+        },
         series: [
-            { type: "bar", data: values }
+            {
+                type: "bar",
+                data: values.map((val, idx) => ({
+                    value: val,
+                    itemStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [
+                                { offset: 0, color: '#4facfe' },
+                                { offset: 1, color: '#00f2fe' }
+                            ]
+                        },
+                        borderRadius: [4, 4, 0, 0]
+                    }
+                })),
+                barWidth: '60%',
+                label: {
+                    show: true,
+                    position: 'top',
+                    color: '#666',
+                    fontSize: 11
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(79, 172, 254, 0.5)'
+                    }
+                },
+                animationDelay: function (idx) {
+                    return idx * 50;
+                }
+            }
         ]
     });
 }
@@ -321,12 +802,99 @@ function updateAreaPie(data) {
         );
     }
 
+    // 区域分布使用多彩渐变色
+    const areaColors = [
+        ['#667eea', '#764ba2'],
+        ['#f093fb', '#f5576c'],
+        ['#4facfe', '#00f2fe'],
+        ['#43e97b', '#38f9d7'],
+        ['#fa709a', '#fee140'],
+        ['#30cfd0', '#330867'],
+        ['#a8edea', '#fed6e3']
+    ];
+    
+    const areaPieData = pieData.map((item, index) => ({
+        ...item,
+        itemStyle: {
+            color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                    { offset: 0, color: areaColors[index % areaColors.length][0] },
+                    { offset: 1, color: areaColors[index % areaColors.length][1] }
+                ]
+            },
+            borderRadius: 8,
+            borderColor: '#fff',
+            borderWidth: 2
+        }
+    }));
+
     areaPieChart.setOption({
-        title: { text: "各区域设备分布", left: "center" },
-        tooltip: { trigger: "item", formatter: "{b}: {c} ({d}%)" },
-        legend: { bottom: 0, left: "center" },
+        title: {
+            text: "各区域设备分布",
+            left: "center",
+            textStyle: {
+                fontSize: 16,
+                fontWeight: 'bold',
+                color: '#2c3e50'
+            }
+        },
+        tooltip: {
+            trigger: "item",
+            formatter: "{b}: {c} ({d}%)",
+            backgroundColor: 'rgba(50, 50, 50, 0.9)',
+            borderColor: '#667eea',
+            borderWidth: 1,
+            textStyle: {
+                color: '#fff'
+            }
+        },
+        legend: {
+            bottom: 10,
+            left: "center",
+            textStyle: {
+                fontSize: 12,
+                color: '#555'
+            }
+        },
         series: [
-            { type: "pie", radius: "60%", data: pieData }
+            {
+                type: "pie",
+                radius: ['40%', '70%'],
+                center: ['50%', '50%'],
+                avoidLabelOverlap: true,
+                label: {
+                    show: true,
+                    formatter: '{b}\n{d}%',
+                    fontSize: 12,
+                    fontWeight: 'bold'
+                },
+                labelLine: {
+                    show: true,
+                    length: 15,
+                    length2: 10
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },
+                    label: {
+                        fontSize: 14
+                    }
+                },
+                animationType: 'scale',
+                animationEasing: 'elasticOut',
+                animationDelay: function (idx) {
+                    return Math.random() * 200;
+                },
+                data: areaPieData
+            }
         ]
     });
 }

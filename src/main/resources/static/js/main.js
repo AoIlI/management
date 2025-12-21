@@ -33,9 +33,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 // 定义角色权限映射（使用完整的href路径匹配）
                 const rolePermissions = {
-                    'admin': ['/user', '/info', '/equipmentManage', '/staffManage', '/courseManage'],
-                    'member': ['/purchase_course', '/order', '/info', '/equipment'],
-                    'coach': ['/purchase_course', '/order', '/info', '/equipment'] // coach和member显示相同
+                    'admin': ['/index', '/user', '/equipmentManage', '/staffManage', '/courseManage', '/info'],
+                    'member': ['/index', '/purchase_course', '/order', '/equipment', '/info'],
+                    'coach': ['/index', '/purchase_course', '/order', '/equipment', '/info'] // coach和member显示相同
                 };
                 
                 // 获取当前角色允许的菜单项
@@ -61,12 +61,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     usernameElement.textContent = data.username;
                 }
                 
-                // 更新角色显示
-                const roleElement = document.querySelector('#popup p');
-                if (roleElement) {
-                    const roleText = role === 'admin' ? '管理员' : 
-                                    role === 'coach' ? '教练' : '会员';
-                    roleElement.textContent = '角色：' + roleText;
+                // 更新弹窗内容：昵称和邮箱
+                const popupParagraphs = document.querySelectorAll('#popup p');
+                if (popupParagraphs.length >= 2) {
+                    // 第一行：昵称
+                    popupParagraphs[0].textContent = '昵称：' + data.username;
+                    // 第二行：邮箱
+                    popupParagraphs[1].textContent = '邮箱：' + (data.email || '无');
                 }
             }
         })

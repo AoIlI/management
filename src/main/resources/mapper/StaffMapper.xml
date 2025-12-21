@@ -22,6 +22,13 @@
         WHERE staff_id = #{staffId}
     </select>
 
+    <select id="selectByAccountId" resultType="org.example.demo.entity.Staff">
+        SELECT staff_id AS staffId, account_id AS accountId, name, role, phone, email, 
+               specialty, hire_date AS hireDate, status, department
+        FROM staff
+        WHERE account_id = #{accountId}
+    </select>
+
     <select id="searchStaffs" resultType="org.example.demo.entity.Staff">
         SELECT staff_id AS staffId, account_id AS accountId, name, role, phone, email, 
                specialty, hire_date AS hireDate, status, department

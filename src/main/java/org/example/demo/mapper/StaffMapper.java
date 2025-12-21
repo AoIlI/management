@@ -13,6 +13,8 @@ public interface StaffMapper {
     
     Staff selectByStaffId(@Param("staffId") String staffId);
     
+    Staff selectByAccountId(@Param("accountId") String accountId);
+    
     List<Staff> searchStaffs(@Param("keyword") String keyword);
     
     int insert(Staff staff);

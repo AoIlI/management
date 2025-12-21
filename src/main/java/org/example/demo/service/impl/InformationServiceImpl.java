@@ -2,8 +2,10 @@ package org.example.demo.service.impl;
 
 import org.example.demo.entity.Account;
 import org.example.demo.entity.Member;
+import org.example.demo.entity.Staff;
 import org.example.demo.mapper.AccountMapper;
 import org.example.demo.mapper.MemberMapper;
+import org.example.demo.mapper.StaffMapper;
 import org.example.demo.service.InformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,9 @@ public class InformationServiceImpl implements InformationService {
 
     @Autowired
     private AccountMapper accountMapper;
+    
+    @Autowired
+    private StaffMapper staffMapper;
 
 
     @Override
@@ -76,15 +81,67 @@ public class InformationServiceImpl implements InformationService {
 
 
     @Override
-    public boolean isUnique(String accountId, String field, String value) {
-        Member self = memberMapper.selectByAccountId(accountId);
-        if (self == null) {
-            return true;
+    public Staff getStaffInfo(String accountId) {
+        return staffMapper.selectByAccountId(accountId);
+    }
+
+    @Override
+    @Transactional
+    public void updateStaffBaseInfo(String accountId, String name, String phone) {
+        Staff staff = staffMapper.selectByAccountId(accountId);
+        if (staff == null) {
+            throw new RuntimeException("员工不存在");
         }
 
-        Member m = memberMapper.selectByField(field, value);
-        if (m == null) return true;
+        // 手机号校验（仅在真的修改时）
+        if (phone != null && !phone.equals(staff.getPhone())) {
+            if (!phone.matches("^1\\d{10}$")) {
+                throw new RuntimeException("手机号格式不正确");
+            }
+            
+            // 检查手机号是否已被其他账号使用
+            Account existingAccount = accountMapper.selectByPhone(phone);
+            if (existingAccount != null && !accountId.equals(existingAccount.getAccountId())) {
+                throw new RuntimeException("手机号已存在");
+            }
+        }
 
-        return self.getMemberId().equals(m.getMemberId());
+        // 执行更新
+        String finalName = (name != null && !name.isBlank()) ? name : staff.getName();
+        String finalPhone = (phone != null) ? phone : staff.getPhone();
+
+        // 更新staff表
+        staff.setName(finalName);
+        staff.setPhone(finalPhone);
+        staffMapper.updateStaff(staff);
+        
+        // 更新accounts表的手机号
+        accountMapper.updateUsernameAndPhone(accountId, null, finalPhone);
+    }
+
+    @Override
+    public boolean isUnique(String accountId, String role, String field, String value) {
+        if ("member".equals(role)) {
+            // Member角色：检查member表
+            Member self = memberMapper.selectByAccountId(accountId);
+            if (self == null) {
+                return true;
+            }
+
+            Member m = memberMapper.selectByField(field, value);
+            if (m == null) return true;
+
+            return self.getMemberId().equals(m.getMemberId());
+        } else {
+            // Admin/Coach角色：检查account表的手机号（因为staff和account通过account_id关联）
+            // 手机号在account表中是唯一的，所以只需要检查account表
+            Account existingAccount = accountMapper.selectByPhone(value);
+            if (existingAccount == null) {
+                return true;  // 手机号不存在，可以使用
+            }
+            
+            // 如果手机号属于当前账号，则可以使用
+            return accountId.equals(existingAccount.getAccountId());
+        }
     }
 }

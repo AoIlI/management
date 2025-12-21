@@ -89,50 +89,92 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('========= API返回的完整数据 =========');
             console.log(data);
             console.log('所有字段名:', Object.keys(data));
-            console.log('memberId (驼峰):', data.memberId);
-            console.log('member_id (下划线):', data.member_id);
-            console.log('membershipType (驼峰):', data.membershipType);
-            console.log('membership_type (下划线):', data.membership_type);
             console.log('====================================');
 
-            // 兼容两种命名方式：优先使用下划线，如果没有则使用驼峰
-            const memberId = data.member_id || data.memberId || '';
-            const membershipType = data.membership_type || data.membershipType || '';
-            const membershipStartDate = data.membership_start_date || data.membershipStartDate || '';
-            const membershipEndDate = data.membership_end_date || data.membershipEndDate || '';
-            const accountStatus = data.account_status || data.accountStatus || '';
-
-            console.log('解析后的值 - memberId:', memberId);
-            console.log('解析后的值 - membershipType:', membershipType);
-
-            // 统一状态值：优先使用account_status，如果没有则使用status
-            const displayStatus = accountStatus || data.status || '-';
-            
-            // 获取用户名和真实姓名
+            const role = data.role || 'member';
             const username = data.username || data.user_name || '-';
             const realName = data.name || '';
+            const displayStatus = data.status || '-';
             
-            // 左侧展示：显示用户名
-            document.getElementById('usernameText').innerText = username;
-            document.getElementById('memberId').innerText = memberId || '-';
-            document.getElementById('membershipType').innerText = membershipType || '-';
-            document.getElementById('status').innerText = displayStatus;
             // 头像显示用户名的首字母
             document.getElementById('avatar').innerText = username && username !== '-' ? username.charAt(0).toUpperCase() : 'U';
+            document.getElementById('usernameText').innerText = username;
+            document.getElementById('status').innerText = displayStatus;
+            document.getElementById('accountStatus').value = displayStatus;
             
-            // 显示可用课程次数
-            const availableClasses = data.available_classes !== undefined ? data.available_classes : 
-                                   (data.availableClasses !== undefined ? data.availableClasses : 0);
-            const availableClassesElement = document.getElementById('availableClasses');
-            if (availableClassesElement) {
-                availableClassesElement.innerText = availableClasses + ' 次';
+            // 根据角色显示不同的内容
+            if (role === 'member') {
+                // Member角色：显示会员信息
+                const memberId = data.memberId || '';
+                const membershipType = data.membershipType || '';
+                const membershipStartDate = data.membershipStartDate || '';
+                const membershipEndDate = data.membershipEndDate || '';
+                const availableClasses = data.availableClasses || 0;
+                
+                // 显示会员相关信息
+                document.getElementById('memberIdItem').style.display = 'flex';
+                document.getElementById('membershipTypeItem').style.display = 'flex';
+                document.getElementById('availableClassesItem').style.display = 'flex';
+                document.getElementById('staffIdItem').style.display = 'none';
+                document.getElementById('staffRoleItem').style.display = 'none';
+                document.getElementById('departmentItem').style.display = 'none';
+                
+                document.getElementById('memberId').innerText = memberId || '-';
+                document.getElementById('membershipType').innerText = membershipType || '-';
+                const availableClassesElement = document.getElementById('availableClasses');
+                if (availableClassesElement) {
+                    availableClassesElement.innerText = availableClasses + ' 次';
+                }
+                
+                // 显示会员表单字段
+                document.getElementById('dateRangeItem').style.display = 'block';
+                document.getElementById('emailItem').style.display = 'none';
+                document.getElementById('hireDateItem').style.display = 'none';
+                document.getElementById('specialtyItem').style.display = 'none';
+                
+                document.getElementById('dateRange').value = membershipStartDate + (membershipStartDate && membershipEndDate ? ' 至 ' : '') + membershipEndDate;
+                
+                // 显示已预约课程卡片
+                document.getElementById('bookingCard').style.display = 'block';
+                
+            } else {
+                // Admin/Coach角色：显示员工信息
+                const staffId = data.staffId || '';
+                const staffRole = data.staffRole || '';
+                const department = data.department || '-';
+                const email = data.email || '-';
+                const hireDate = data.hireDate || '-';
+                const specialty = data.specialty || '-';
+                
+                // 显示员工相关信息
+                document.getElementById('memberIdItem').style.display = 'none';
+                document.getElementById('membershipTypeItem').style.display = 'none';
+                document.getElementById('availableClassesItem').style.display = 'none';
+                document.getElementById('staffIdItem').style.display = 'flex';
+                document.getElementById('staffRoleItem').style.display = 'flex';
+                document.getElementById('departmentItem').style.display = 'flex';
+                
+                document.getElementById('staffId').innerText = staffId || '-';
+                document.getElementById('staffRole').innerText = staffRole || '-';
+                document.getElementById('department').innerText = department || '-';
+                
+                // 显示员工表单字段
+                document.getElementById('dateRangeItem').style.display = 'none';
+                document.getElementById('emailItem').style.display = 'block';
+                document.getElementById('hireDateItem').style.display = 'block';
+                document.getElementById('specialtyItem').style.display = 'block';
+                
+                document.getElementById('emailInput').value = email || '-';
+                document.getElementById('hireDateInput').value = hireDate || '-';
+                document.getElementById('specialtyInput').value = specialty || '-';
+                
+                // 隐藏已预约课程卡片
+                document.getElementById('bookingCard').style.display = 'none';
             }
-
-            // 右侧表单：显示真实姓名（可以修改）
+            
+            // 通用字段
             nameInput.value = realName || '';
             phoneInput.value = data.phone || '';
-            document.getElementById('dateRange').value = membershipStartDate + (membershipStartDate && membershipEndDate ? ' 至 ' : '') + membershipEndDate;
-            document.getElementById('accountStatus').value = displayStatus;
 
             // 保存原始值
             originName = realName || '';
@@ -256,35 +298,48 @@ document.addEventListener("DOMContentLoaded", function () {
                 fetch('/api/info')
                     .then(res => res.json())
                     .then(data => {
-                        // 兼容两种命名方式
-                        const memberId = data.member_id || data.memberId || '';
-                        const membershipType = data.membership_type || data.membershipType || '';
-                        const membershipStartDate = data.membership_start_date || data.membershipStartDate || '';
-                        const membershipEndDate = data.membership_end_date || data.membershipEndDate || '';
-                        const accountStatus = data.account_status || data.accountStatus || '';
-                        const displayStatus = accountStatus || data.status || '-';
-                        const availableClasses = data.available_classes !== undefined ? data.available_classes : 
-                                               (data.availableClasses !== undefined ? data.availableClasses : 0);
-                        
-                        // 获取用户名和真实姓名
+                        const role = data.role || 'member';
                         const username = data.username || data.user_name || '-';
                         const realName = data.name || '';
+                        const displayStatus = data.status || '-';
                         
-                        // 左侧同步更新：显示用户名
+                        // 更新通用字段
                         document.getElementById("usernameText").innerText = username;
                         document.getElementById("avatar").innerText = username && username !== '-' ? username.charAt(0).toUpperCase() : "U";
-                        document.getElementById("memberId").innerText = memberId || '-';
-                        document.getElementById("membershipType").innerText = membershipType || '-';
                         document.getElementById("status").innerText = displayStatus;
-                        
-                        const availableClassesElement = document.getElementById('availableClasses');
-                        if (availableClassesElement) {
-                            availableClassesElement.innerText = availableClasses + ' 次';
-                        }
-                        
-                        // 右侧同步更新
-                        document.getElementById('dateRange').value = membershipStartDate + (membershipStartDate && membershipEndDate ? ' 至 ' : '') + membershipEndDate;
                         document.getElementById('accountStatus').value = displayStatus;
+                        
+                        if (role === 'member') {
+                            // Member角色更新
+                            const memberId = data.memberId || '';
+                            const membershipType = data.membershipType || '';
+                            const membershipStartDate = data.membershipStartDate || '';
+                            const membershipEndDate = data.membershipEndDate || '';
+                            const availableClasses = data.availableClasses || 0;
+                            
+                            document.getElementById("memberId").innerText = memberId || '-';
+                            document.getElementById("membershipType").innerText = membershipType || '-';
+                            const availableClassesElement = document.getElementById('availableClasses');
+                            if (availableClassesElement) {
+                                availableClassesElement.innerText = availableClasses + ' 次';
+                            }
+                            document.getElementById('dateRange').value = membershipStartDate + (membershipStartDate && membershipEndDate ? ' 至 ' : '') + membershipEndDate;
+                        } else {
+                            // Admin/Coach角色更新
+                            const staffId = data.staffId || '';
+                            const staffRole = data.staffRole || '';
+                            const department = data.department || '-';
+                            const email = data.email || '-';
+                            const hireDate = data.hireDate || '-';
+                            const specialty = data.specialty || '-';
+                            
+                            document.getElementById('staffId').innerText = staffId || '-';
+                            document.getElementById('staffRole').innerText = staffRole || '-';
+                            document.getElementById('department').innerText = department || '-';
+                            document.getElementById('emailInput').value = email || '-';
+                            document.getElementById('hireDateInput').value = hireDate || '-';
+                            document.getElementById('specialtyInput').value = specialty || '-';
+                        }
                         
                         // 更新原始值
                         originName = payload.name;
@@ -292,9 +347,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     })
                     .catch(err => {
                         console.error('重新加载用户信息失败:', err);
-                        // 即使失败也更新基本字段
-                        document.getElementById("nameText").innerText = payload.name;
-                        document.getElementById("avatar").innerText = payload.name ? payload.name.charAt(0) : "U";
                     });
             })
             .catch(err => {
